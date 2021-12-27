@@ -8,17 +8,17 @@ build_property.PlatformNeutralAssembly =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = kassablad.app.Server
 build_property.RootNamespace = kassablad.app.Server
-build_property.ProjectDir = c:\Users\ruben\Code\Bronneken\kassablad\kassablad.app\Server\
+build_property.ProjectDir = C:\Users\ruben\Code\Bronneken\kassablad\kassablad.app\Server\
 build_property.RazorLangVersion = 6.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = c:\Users\ruben\Code\Bronneken\kassablad\kassablad.app\Server
+build_property.MSBuildProjectDirectory = C:\Users\ruben\Code\Bronneken\kassablad\kassablad.app\Server
 build_property._RazorSourceGeneratorDebug = 
 
-[c:/Users/ruben/Code/Bronneken/kassablad/kassablad.app/Server/Areas/Identity/Pages/Shared/_LoginPartial.cshtml]
+[C:/Users/ruben/Code/Bronneken/kassablad/kassablad.app/Server/Areas/Identity/Pages/Shared/_LoginPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcU2hhcmVkXF9Mb2dpblBhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[c:/Users/ruben/Code/Bronneken/kassablad/kassablad.app/Server/Pages/Error.cshtml]
+[C:/Users/ruben/Code/Bronneken/kassablad/kassablad.app/Server/Pages/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 

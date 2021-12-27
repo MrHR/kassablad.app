@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\ruben\\code\\Bronneken\\kassablad\\kassablad.app\\Shared\\kassablad.app.Shared.csproj": {}
+    "C:\\Users\\ruben\\Code\\Bronneken\\kassablad\\kassablad.app\\Shared\\kassablad.app.Shared.csproj": {}
   },
   "projects": {
-    "C:\\Users\\ruben\\code\\Bronneken\\kassablad\\kassablad.app\\Shared\\kassablad.app.Shared.csproj": {
+    "C:\\Users\\ruben\\Code\\Bronneken\\kassablad\\kassablad.app\\Shared\\kassablad.app.Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ruben\\code\\Bronneken\\kassablad\\kassablad.app\\Shared\\kassablad.app.Shared.csproj",
+        "projectUniqueName": "C:\\Users\\ruben\\Code\\Bronneken\\kassablad\\kassablad.app\\Shared\\kassablad.app.Shared.csproj",
         "projectName": "kassablad.app.Shared",
-        "projectPath": "C:\\Users\\ruben\\code\\Bronneken\\kassablad\\kassablad.app\\Shared\\kassablad.app.Shared.csproj",
+        "projectPath": "C:\\Users\\ruben\\Code\\Bronneken\\kassablad\\kassablad.app\\Shared\\kassablad.app.Shared.csproj",
         "packagesPath": "C:\\Users\\ruben\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ruben\\code\\Bronneken\\kassablad\\kassablad.app\\Shared\\obj\\",
+        "outputPath": "C:\\Users\\ruben\\Code\\Bronneken\\kassablad\\kassablad.app\\Shared\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\ruben\\AppData\\Roaming\\NuGet\\NuGet.Config",

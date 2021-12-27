@@ -41,6 +41,72 @@
         }
       },
       {
+        "HashCode": 1598139350,
+        "Kind": "Components.Component",
+        "Name": "kassablad.app.Client.Pages.Index",
+        "AssemblyName": "kassablad.app.Client",
+        "CaseSensitive": true,
+        "TagMatchingRules": [
+          {
+            "TagName": "Index"
+          }
+        ],
+        "Metadata": {
+          "Runtime.Name": "Components.IComponent",
+          "Common.TypeName": "kassablad.app.Client.Pages.Index"
+        }
+      },
+      {
+        "HashCode": 2120751158,
+        "Kind": "Components.Component",
+        "Name": "kassablad.app.Client.Pages.Index",
+        "AssemblyName": "kassablad.app.Client",
+        "CaseSensitive": true,
+        "TagMatchingRules": [
+          {
+            "TagName": "kassablad.app.Client.Pages.Index"
+          }
+        ],
+        "Metadata": {
+          "Runtime.Name": "Components.IComponent",
+          "Common.TypeName": "kassablad.app.Client.Pages.Index",
+          "Components.NameMatch": "Components.FullyQualifiedNameMatch"
+        }
+      },
+      {
+        "HashCode": -13971278,
+        "Kind": "Components.Component",
+        "Name": "kassablad.app.Client.Pages.Kassa.Kassablad",
+        "AssemblyName": "kassablad.app.Client",
+        "CaseSensitive": true,
+        "TagMatchingRules": [
+          {
+            "TagName": "Kassablad"
+          }
+        ],
+        "Metadata": {
+          "Runtime.Name": "Components.IComponent",
+          "Common.TypeName": "kassablad.app.Client.Pages.Kassa.Kassablad"
+        }
+      },
+      {
+        "HashCode": 1659798116,
+        "Kind": "Components.Component",
+        "Name": "kassablad.app.Client.Pages.Kassa.Kassablad",
+        "AssemblyName": "kassablad.app.Client",
+        "CaseSensitive": true,
+        "TagMatchingRules": [
+          {
+            "TagName": "kassablad.app.Client.Pages.Kassa.Kassablad"
+          }
+        ],
+        "Metadata": {
+          "Runtime.Name": "Components.IComponent",
+          "Common.TypeName": "kassablad.app.Client.Pages.Kassa.Kassablad",
+          "Components.NameMatch": "Components.FullyQualifiedNameMatch"
+        }
+      },
+      {
         "HashCode": -234011728,
         "Kind": "Components.Component",
         "Name": "kassablad.app.Client.Pages.Authentication",
@@ -156,39 +222,6 @@
         "Metadata": {
           "Runtime.Name": "Components.IComponent",
           "Common.TypeName": "kassablad.app.Client.Pages.FetchData",
-          "Components.NameMatch": "Components.FullyQualifiedNameMatch"
-        }
-      },
-      {
-        "HashCode": 1598139350,
-        "Kind": "Components.Component",
-        "Name": "kassablad.app.Client.Pages.Index",
-        "AssemblyName": "kassablad.app.Client",
-        "CaseSensitive": true,
-        "TagMatchingRules": [
-          {
-            "TagName": "Index"
-          }
-        ],
-        "Metadata": {
-          "Runtime.Name": "Components.IComponent",
-          "Common.TypeName": "kassablad.app.Client.Pages.Index"
-        }
-      },
-      {
-        "HashCode": 2120751158,
-        "Kind": "Components.Component",
-        "Name": "kassablad.app.Client.Pages.Index",
-        "AssemblyName": "kassablad.app.Client",
-        "CaseSensitive": true,
-        "TagMatchingRules": [
-          {
-            "TagName": "kassablad.app.Client.Pages.Index"
-          }
-        ],
-        "Metadata": {
-          "Runtime.Name": "Components.IComponent",
-          "Common.TypeName": "kassablad.app.Client.Pages.Index",
           "Components.NameMatch": "Components.FullyQualifiedNameMatch"
         }
       },
@@ -71684,6 +71717,11 @@
     {
       "FilePath": "c:\\Users\\ruben\\Code\\Bronneken\\kassablad\\kassablad.app\\Client\\Shared\\MainLayout.razor",
       "TargetPath": "Shared\\MainLayout.razor",
+      "FileKind": "component"
+    },
+    {
+      "FilePath": "c:\\Users\\ruben\\Code\\Bronneken\\kassablad\\kassablad.app\\Client\\Pages\\Kassa\\Kassablad.razor",
+      "TargetPath": "Pages\\Kassa\\Kassablad.razor",
       "FileKind": "component"
     },
     {

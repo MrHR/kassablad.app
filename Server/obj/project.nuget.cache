@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "8ca5WcAzRkEOo8+0e7P6RF3do5rhVWglXInZKk+7NF6mSGEIjafhkfpLxvIBYcT04QCSy+daDpEKdYCu0PEqdw==",
+  "dgSpecHash": "RbDYhslvrjVFDEXSe7ioO7ZqeUGK+XrNq5Qsz7ZddORo0kXKtK02xdCp8XR9AIKv0vt1M7BX1+NTNVMp9yPdPQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\ruben\\code\\Bronneken\\kassablad\\kassablad.app\\Server\\kassablad.app.Server.csproj",
+  "projectFilePath": "C:\\Users\\ruben\\Code\\Bronneken\\kassablad\\kassablad.app\\Server\\kassablad.app.Server.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ruben\\.nuget\\packages\\automapper\\10.0.0\\automapper.10.0.0.nupkg.sha512",
     "C:\\Users\\ruben\\.nuget\\packages\\duende.identityserver\\5.2.0\\duende.identityserver.5.2.0.nupkg.sha512",
@@ -70,6 +70,7 @@
     "C:\\Users\\ruben\\.nuget\\packages\\microsoft.jsinterop\\6.0.1\\microsoft.jsinterop.6.0.1.nupkg.sha512",
     "C:\\Users\\ruben\\.nuget\\packages\\microsoft.jsinterop.webassembly\\6.0.1\\microsoft.jsinterop.webassembly.6.0.1.nupkg.sha512",
     "C:\\Users\\ruben\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
+    "C:\\Users\\ruben\\.nuget\\packages\\radzen.blazor\\3.13.11\\radzen.blazor.3.13.11.nupkg.sha512",
     "C:\\Users\\ruben\\.nuget\\packages\\sqlitepclraw.bundle_e_sqlite3\\2.0.6\\sqlitepclraw.bundle_e_sqlite3.2.0.6.nupkg.sha512",
     "C:\\Users\\ruben\\.nuget\\packages\\sqlitepclraw.core\\2.0.6\\sqlitepclraw.core.2.0.6.nupkg.sha512",
     "C:\\Users\\ruben\\.nuget\\packages\\sqlitepclraw.lib.e_sqlite3\\2.0.6\\sqlitepclraw.lib.e_sqlite3.2.0.6.nupkg.sha512",
@@ -79,6 +80,7 @@
     "C:\\Users\\ruben\\.nuget\\packages\\system.diagnostics.diagnosticsource\\6.0.0\\system.diagnostics.diagnosticsource.6.0.0.nupkg.sha512",
     "C:\\Users\\ruben\\.nuget\\packages\\system.identitymodel.tokens.jwt\\6.10.0\\system.identitymodel.tokens.jwt.6.10.0.nupkg.sha512",
     "C:\\Users\\ruben\\.nuget\\packages\\system.io.pipelines\\6.0.1\\system.io.pipelines.6.0.1.nupkg.sha512",
+    "C:\\Users\\ruben\\.nuget\\packages\\system.linq.dynamic.core\\1.2.12\\system.linq.dynamic.core.1.2.12.nupkg.sha512",
     "C:\\Users\\ruben\\.nuget\\packages\\system.memory\\4.5.4\\system.memory.4.5.4.nupkg.sha512",
     "C:\\Users\\ruben\\.nuget\\packages\\system.reflection.emit\\4.7.0\\system.reflection.emit.4.7.0.nupkg.sha512",
     "C:\\Users\\ruben\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",

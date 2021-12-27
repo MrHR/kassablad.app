@@ -1,0 +1,23 @@
+@page "/kassablad"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using kassablad.app.Shared
+@attribute [Authorize]
+@inject HttpClient Http
+
+<PageTitle>Kassablad</PageTitle>
+
+<h1>Kassablad</h1>
+
+<p>Welkom! Tel je kasse en laat het zuipfestijn beginnen!!!</p>
+
+<div class="content-container">
+    <RadzenFieldset 
+        AllowCollapse="true" 
+        Style="width: 700px; margin: 40px auto;"
+    >
+    </RadzenFieldset>
+</div>
+
+@code {
+}

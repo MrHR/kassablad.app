@@ -900,6 +900,27 @@
           "lib/netstandard2.0/Newtonsoft.Json.dll": {}
         }
       },
+      "Radzen.Blazor/3.13.11": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNetCore.Components": "5.0.0",
+          "Microsoft.AspNetCore.Components.Web": "5.0.0",
+          "Microsoft.CSharp": "4.7.0",
+          "System.Linq.Dynamic.Core": "1.2.12"
+        },
+        "compile": {
+          "lib/net5.0/Radzen.Blazor.dll": {}
+        },
+        "runtime": {
+          "lib/net5.0/Radzen.Blazor.dll": {}
+        },
+        "build": {
+          "buildTransitive/Radzen.Blazor.props": {}
+        },
+        "buildMultiTargeting": {
+          "buildMultiTargeting/Radzen.Blazor.props": {}
+        }
+      },
       "SQLitePCLRaw.bundle_e_sqlite3/2.0.6": {
         "type": "package",
         "dependencies": {
@@ -1073,6 +1094,15 @@
           "buildTransitive/netcoreapp3.1/_._": {}
         }
       },
+      "System.Linq.Dynamic.Core/1.2.12": {
+        "type": "package",
+        "compile": {
+          "lib/net5.0/System.Linq.Dynamic.Core.dll": {}
+        },
+        "runtime": {
+          "lib/net5.0/System.Linq.Dynamic.Core.dll": {}
+        }
+      },
       "System.Memory/4.5.4": {
         "type": "package",
         "compile": {
@@ -1162,6 +1192,7 @@
           "Microsoft.AspNetCore.Components.WebAssembly": "6.0.1",
           "Microsoft.AspNetCore.Components.WebAssembly.Authentication": "6.0.1",
           "Microsoft.Extensions.Http": "6.0.0",
+          "Radzen.Blazor": "3.13.11",
           "kassablad.app.Shared": "1.0.0"
         },
         "compile": {
@@ -2580,6 +2611,54 @@
         "packageIcon.png"
       ]
     },
+    "Radzen.Blazor/3.13.11": {
+      "sha512": "dnk8tIaRH4tSxdWjJefspcB82yj/bemQSHtJPVZR1I0fpbxsou6OxdoJB8fK5pwjt5Bml5NcabGuilnvGnOLLw==",
+      "type": "package",
+      "path": "radzen.blazor/3.13.11",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "build/Microsoft.AspNetCore.StaticWebAssets.props",
+        "build/Radzen.Blazor.props",
+        "buildMultiTargeting/Radzen.Blazor.props",
+        "buildTransitive/Radzen.Blazor.props",
+        "icon.png",
+        "lib/net5.0/Radzen.Blazor.dll",
+        "lib/net5.0/Radzen.Blazor.xml",
+        "lib/netstandard2.1/Radzen.Blazor.dll",
+        "lib/netstandard2.1/Radzen.Blazor.xml",
+        "radzen.blazor.3.13.11.nupkg.sha512",
+        "radzen.blazor.nuspec",
+        "staticwebassets/Radzen.Blazor.js",
+        "staticwebassets/css/dark-base.css",
+        "staticwebassets/css/dark.css",
+        "staticwebassets/css/default-base.css",
+        "staticwebassets/css/default.css",
+        "staticwebassets/css/humanistic-base.css",
+        "staticwebassets/css/humanistic.css",
+        "staticwebassets/css/software-base.css",
+        "staticwebassets/css/software.css",
+        "staticwebassets/css/standard-base.css",
+        "staticwebassets/css/standard.css",
+        "staticwebassets/fonts/MaterialIcons-Regular.woff",
+        "staticwebassets/fonts/SourceSansPro-Black.woff",
+        "staticwebassets/fonts/SourceSansPro-BlackIt.woff",
+        "staticwebassets/fonts/SourceSansPro-Bold.woff",
+        "staticwebassets/fonts/SourceSansPro-BoldIt.woff",
+        "staticwebassets/fonts/SourceSansPro-ExtraLight.woff",
+        "staticwebassets/fonts/SourceSansPro-ExtraLightIt.woff",
+        "staticwebassets/fonts/SourceSansPro-It.woff",
+        "staticwebassets/fonts/SourceSansPro-Light.woff",
+        "staticwebassets/fonts/SourceSansPro-LightIt.woff",
+        "staticwebassets/fonts/SourceSansPro-Regular.woff",
+        "staticwebassets/fonts/SourceSansPro-Semibold.woff",
+        "staticwebassets/fonts/SourceSansPro-SemiboldIt.woff",
+        "staticwebassets/fonts/roboto-v15-latin-300.woff",
+        "staticwebassets/fonts/roboto-v15-latin-700.woff",
+        "staticwebassets/fonts/roboto-v15-latin-regular.woff"
+      ]
+    },
     "SQLitePCLRaw.bundle_e_sqlite3/2.0.6": {
       "sha512": "zssYqiaucyGArZfg74rJuzK0ewgZiidsRVrZTmP7JLNvK806gXg6PGA46XzoJGpNPPA5uRcumwvVp6YTYxtQ5w==",
       "type": "package",
@@ -2775,6 +2854,48 @@
         "system.io.pipelines.6.0.1.nupkg.sha512",
         "system.io.pipelines.nuspec",
         "useSharedDesignerContext.txt"
+      ]
+    },
+    "System.Linq.Dynamic.Core/1.2.12": {
+      "sha512": "wJDLhidcJnLAJeZ4z10YVAxMm4rTW0zlYmUjriJTo4eGLHD5NKZOm6qFabkn5TinbfZ6LM9LeYFPyiQMpRly3Q==",
+      "type": "package",
+      "path": "system.linq.dynamic.core/1.2.12",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net35/System.Linq.Dynamic.Core.dll",
+        "lib/net35/System.Linq.Dynamic.Core.pdb",
+        "lib/net35/System.Linq.Dynamic.Core.xml",
+        "lib/net40/System.Linq.Dynamic.Core.dll",
+        "lib/net40/System.Linq.Dynamic.Core.pdb",
+        "lib/net40/System.Linq.Dynamic.Core.xml",
+        "lib/net45/System.Linq.Dynamic.Core.dll",
+        "lib/net45/System.Linq.Dynamic.Core.pdb",
+        "lib/net45/System.Linq.Dynamic.Core.xml",
+        "lib/net46/System.Linq.Dynamic.Core.dll",
+        "lib/net46/System.Linq.Dynamic.Core.pdb",
+        "lib/net46/System.Linq.Dynamic.Core.xml",
+        "lib/net5.0/System.Linq.Dynamic.Core.dll",
+        "lib/net5.0/System.Linq.Dynamic.Core.pdb",
+        "lib/net5.0/System.Linq.Dynamic.Core.xml",
+        "lib/netcoreapp2.1/System.Linq.Dynamic.Core.dll",
+        "lib/netcoreapp2.1/System.Linq.Dynamic.Core.pdb",
+        "lib/netcoreapp2.1/System.Linq.Dynamic.Core.xml",
+        "lib/netstandard1.3/System.Linq.Dynamic.Core.dll",
+        "lib/netstandard1.3/System.Linq.Dynamic.Core.pdb",
+        "lib/netstandard1.3/System.Linq.Dynamic.Core.xml",
+        "lib/netstandard2.0/System.Linq.Dynamic.Core.dll",
+        "lib/netstandard2.0/System.Linq.Dynamic.Core.pdb",
+        "lib/netstandard2.0/System.Linq.Dynamic.Core.xml",
+        "lib/netstandard2.1/System.Linq.Dynamic.Core.dll",
+        "lib/netstandard2.1/System.Linq.Dynamic.Core.pdb",
+        "lib/netstandard2.1/System.Linq.Dynamic.Core.xml",
+        "lib/uap10.0.10240/System.Linq.Dynamic.Core.dll",
+        "lib/uap10.0.10240/System.Linq.Dynamic.Core.pdb",
+        "lib/uap10.0.10240/System.Linq.Dynamic.Core.pri",
+        "lib/uap10.0.10240/System.Linq.Dynamic.Core.xml",
+        "system.linq.dynamic.core.1.2.12.nupkg.sha512",
+        "system.linq.dynamic.core.nuspec"
       ]
     },
     "System.Memory/4.5.4": {
@@ -3053,11 +3174,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ruben\\code\\Bronneken\\kassablad\\kassablad.app\\Server\\kassablad.app.Server.csproj",
+      "projectUniqueName": "C:\\Users\\ruben\\Code\\Bronneken\\kassablad\\kassablad.app\\Server\\kassablad.app.Server.csproj",
       "projectName": "kassablad.app.Server",
-      "projectPath": "C:\\Users\\ruben\\code\\Bronneken\\kassablad\\kassablad.app\\Server\\kassablad.app.Server.csproj",
+      "projectPath": "C:\\Users\\ruben\\Code\\Bronneken\\kassablad\\kassablad.app\\Server\\kassablad.app.Server.csproj",
       "packagesPath": "C:\\Users\\ruben\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ruben\\code\\Bronneken\\kassablad\\kassablad.app\\Server\\obj\\",
+      "outputPath": "C:\\Users\\ruben\\Code\\Bronneken\\kassablad\\kassablad.app\\Server\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\ruben\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -3074,11 +3195,11 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\Users\\ruben\\code\\Bronneken\\kassablad\\kassablad.app\\Client\\kassablad.app.Client.csproj": {
-              "projectPath": "C:\\Users\\ruben\\code\\Bronneken\\kassablad\\kassablad.app\\Client\\kassablad.app.Client.csproj"
+            "C:\\Users\\ruben\\Code\\Bronneken\\kassablad\\kassablad.app\\Client\\kassablad.app.Client.csproj": {
+              "projectPath": "C:\\Users\\ruben\\Code\\Bronneken\\kassablad\\kassablad.app\\Client\\kassablad.app.Client.csproj"
             },
-            "C:\\Users\\ruben\\code\\Bronneken\\kassablad\\kassablad.app\\Shared\\kassablad.app.Shared.csproj": {
-              "projectPath": "C:\\Users\\ruben\\code\\Bronneken\\kassablad\\kassablad.app\\Shared\\kassablad.app.Shared.csproj"
+            "C:\\Users\\ruben\\Code\\Bronneken\\kassablad\\kassablad.app\\Shared\\kassablad.app.Shared.csproj": {
+              "projectPath": "C:\\Users\\ruben\\Code\\Bronneken\\kassablad\\kassablad.app\\Shared\\kassablad.app.Shared.csproj"
             }
           }
         }
