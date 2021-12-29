@@ -10,18 +10,17 @@ public class KassaNomination {
     [Required]
     public DateTime DateUpdated { get; set; }
     [Required]
-    public int UpdatedBy { get; set; }
-    [Required]
     public int CreatedBy { get; set; }
-    [Required]
-    public int KassaId { get; set; }
-    [Required]
-    public int NominationId { get; set; }
     [Required]
     public int Amount { get; set; }
     [Required]
+    public int KassaId { get; set; }
+    [Required]
     public virtual Kassa? Kassa { get; set; }
     [Required]
+    public int NominationId { get; set; }
+    [Required]
     public virtual Nomination? Nomination { get; set; }
-    
+    [Required]
+    public Nom? Nom { get; set; }
 }

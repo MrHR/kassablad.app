@@ -32,6 +32,10 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
         // Ownership of keyless value object definition -> nomination.cs
         builder.Entity<Nomination>()
             .OwnsOne(nomination => nomination.Nom);
+
+        // Ownership of keyless value object definition -> KassaNomination.cs
+        builder.Entity<KassaNomination>()
+            .OwnsOne(nomination => nomination.Nom);
         
         // If following id conventions 
         builder.Entity<ApplicationUser>()

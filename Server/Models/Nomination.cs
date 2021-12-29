@@ -1,6 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.Design;
 
 namespace kassablad.app.Server.Models;
 public class Nomination {
@@ -21,11 +19,4 @@ public class Nomination {
     public virtual ICollection<KassaNomination>? KassaNominations { get; set; }
     [Required]
     public Nom? Nom { get; set; } // The Ownership of this keyless value object is defined in dbContext with fluent API
-}
-public class Nom {
-    [Required]
-    [Column(TypeName = "decimal(18,2)")]
-    public decimal Multiplier { get; set; }
-    [Required]
-    public string? Currency { get; set; } = "€";
 }
