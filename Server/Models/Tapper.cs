@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace kassablad.app;
+namespace kassablad.app.Server.Models;
 
 public class Tapper {
     public int TapperId { get; set; }

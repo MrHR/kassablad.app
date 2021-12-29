@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace kassablad.app;
+namespace kassablad.app.Server.Models;
 public class Consumptie {
     public int ConsumptieId { get; set; }
     public bool Active { get; set; }

@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace kassablad.app;
+namespace kassablad.app.Server.Models;
 public class KassaContainer 
 {
     public int KassaContainerId { get; set; }
@@ -32,4 +32,7 @@ public class KassaContainer
     public bool Concept { get; set; }
     public virtual ICollection<Kassa>? Kassas { get; set; }
     public virtual ICollection<ConsumptieCount>? ConsumptieCounts { get; set; }
+
+    public ICollection<ApplicationUser>? ApplicationUsers { get; set; } // Check KassaContainerTapper.cs
+    public List<KassaContainerApplicationUser>? KassaContainerApplicationUsers { get; set; }
 }

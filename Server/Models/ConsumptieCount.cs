@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace kassablad.app;
-public class Kassa {
-    public int KassaId { get; set; }
+namespace kassablad.app.Server.Models;
+public class ConsumptieCount {
+    public int ConsumptieCountId { get; set; }
     [Required]
     public bool Active { get; set; }
     [Required]
@@ -10,13 +10,15 @@ public class Kassa {
     [Required]
     public DateTime DateUpdated { get; set; }
     [Required]
-    public int UpdatedBy { get; set; }
-    [Required]
     public int CreatedBy { get; set; }
+    [Required]
+    public int UpdatedBy { get; set; }
     [Required]
     public int KassaContainerId { get; set; }
     [Required]
-    public string? Type { get; set; }
+    public int ConsumptieId { get; set; }
+    [Required]
+    public int Aantal { get; set; }
     public virtual KassaContainer? KassaContainer { get; set; }
-    public virtual ICollection<KassaNomination>? KassaNominations { get; set; }
+    public virtual Consumptie? Consumptie { get; set; }
 }

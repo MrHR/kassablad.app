@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace kassablad.app;
+namespace kassablad.app.Server.Models;
 public class KassaTemplate {
     public int KassaTemplateId { get; set; }
     public bool Active { get; set; }
