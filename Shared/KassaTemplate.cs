@@ -4,9 +4,9 @@ namespace kassablad.app;
 public class KassaTemplate {
     public int KassaTemplateId { get; set; }
     public bool Active { get; set; }
-    [Timestamp]
+    [Required]
     public DateTime DateAdded { get; set; }
-    [Timestamp]
+    [Required]
     public DateTime DateUpdated { get; set; }
     public int UpdatedBy { get; set; }
     public int CreatedBy { get; set; }

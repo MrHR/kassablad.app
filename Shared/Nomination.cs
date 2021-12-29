@@ -1,24 +1,31 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.Design;
 
 namespace kassablad.app;
 public class Nomination {
     public int NominationId { get; set; }
     [Required]
     public bool Active { get; set; }
-    [Timestamp]
+    [Required]
     public DateTime DateAdded { get; set; }
-    [Timestamp]
+    [Required]
     public DateTime DateUpdated { get; set; }
     [Required]
     public int UpdatedBy { get; set; }
     [Required]
     public int CreatedBy { get; set; }
     [Required]
-    public string? Nom { get; set; }
+    public int DefaultAmount { get; set; }
+    public string Total { get; set; } = String.Empty;
+    public virtual ICollection<KassaNomination>? KassaNominations { get; set; }
     [Required]
+    public Nom Nom { get; set; }
+}
+public class Nom {
+    [Required]
+    [Column(TypeName = "decimal(18,2)")]
     public decimal Multiplier { get; set; }
     [Required]
-    public int DefaultAmount { get; set; }
-    public string? Total { get; set; }
-    public virtual ICollection<KassaNomination>? KassaNominations { get; set; }
+    public string? Currency { get; set; }
 }

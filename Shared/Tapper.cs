@@ -6,9 +6,9 @@ public class Tapper {
     public int TapperId { get; set; }
     [Required]
     public bool Active { get; set; }
-    [Timestamp]
+    [Required]
     public DateTime DateAdded { get; set; }
-    [Timestamp]
+    [Required]
     public DateTime DateUpdated { get; set; }
     [Required]
     public int CreatedBy { get; set; }

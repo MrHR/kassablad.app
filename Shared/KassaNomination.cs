@@ -5,9 +5,9 @@ public class KassaNomination {
     public int KassaNominationId { get; set; }
     [Required]
     public bool Active { get; set; }
-    [Timestamp]
+    [Required]
     public DateTime DateAdded { get; set; }
-    [Timestamp]
+    [Required]
     public DateTime DateUpdated { get; set; }
     [Required]
     public int UpdatedBy { get; set; }
