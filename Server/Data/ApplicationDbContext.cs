@@ -43,6 +43,11 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
             .WithMany(a => a.ApplicationUsers)
             .UsingEntity(j => j.ToTable("KassaContainerApplicationUsers"));
 
+        //KassaNominationTotal
+        builder.Entity<KassaNomination>()
+            .Property(kn => kn.Total)
+            .HasComputedColumnSql("[Nom_Multiplier] + [Amount]", stored: true);
+
         // many-to-many relationship between kassaContainers and ApplicationUsers
         //Because there is more data saved in the KassaContainerApplicationTable we define it here explicitly
         // more info: https://docs.microsoft.com/en-us/ef/core/modeling/relationships?tabs=fluent-api%2Cfluent-api-simple-key%2Csimple-key#other-relationship-patterns

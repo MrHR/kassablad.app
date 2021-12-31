@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace kassablad.app.Server.Models;
 public class KassaNomination {
@@ -23,4 +24,6 @@ public class KassaNomination {
     public virtual Nomination? Nomination { get; set; }
     [Required]
     public Nom? Nom { get; set; }
+    [Column(TypeName = "decimal(18,2)")]
+    public decimal Total { get; private set; } // private because this is a computed value (definition in dbcontext)
 }
