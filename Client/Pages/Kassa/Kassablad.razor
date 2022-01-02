@@ -2,8 +2,11 @@
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @using kassablad.app.Shared
+@using kassablad.app.Shared.Models
 @attribute [Authorize]
 @inject HttpClient Http
+@using Microsoft.Extensions.Logging
+@inject ILogger<KassaContainer> Logger
 
 <PageTitle>Kassablad</PageTitle>
 
@@ -12,12 +15,54 @@
 <p>Welkom! Tel je kasse en laat het zuipfestijn beginnen!!!</p>
 
 <div class="content-container">
-    <RadzenFieldset 
-        AllowCollapse="true" 
-        Style="width: 700px; margin: 40px auto;"
-    >
-    </RadzenFieldset>
+    <EditForm Model=@kassaContainer OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <RadzenCard>
+            <h4>Activiteit</h4>
+            <RadzenDropDown 
+                AllowClear="true" 
+                TValue="string" 
+                Data=@(activiteiten) 
+                id="activiteit"
+                @bind-Value="kassaContainer.Activiteit"
+            />
+        </RadzenCard>
+        <br/>
+        <RadzenButton
+            IsBusy=@busy 
+            Click=@OnBusyClick 
+            Text="Start" 
+            type="submit" 
+        />
+    </EditForm>
 </div>
 
 @code {
+    private KassaContainer kassaContainer = new() {
+        DateAdded = DateTime.Now,
+        DateUpdated = DateTime.Now,
+        Active = true,
+        Activiteit = "Café"
+    };
+    List<string> activiteiten = new List<string>() {
+            "Café",
+            "Foif",
+            "Fiest",
+            "Opkuis",
+            "Ander"
+        };
+    bool busy;
+
+    async Task OnBusyClick()
+    {
+        busy = true;
+        await Task.Delay(2000);
+        busy = false;
+    }
+
+    private void HandleValidSubmit()
+    {
+        Logger.LogInformation("Handlesubmit called");
+    }
 }

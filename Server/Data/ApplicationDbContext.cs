@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.Extensions.Options;
 using Duende.IdentityServer.EntityFramework.Options;
-using kassablad.app.Server.Models;
+using kassablad.app.Shared.Models;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace kassablad.app.Server.Data;

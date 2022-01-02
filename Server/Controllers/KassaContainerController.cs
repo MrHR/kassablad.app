@@ -7,18 +7,24 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using kassablad.app.Server.Data;
-using kassablad.app.Server.Models;
+using kassablad.app.Shared.Models;
+using kassablad.app.Shared;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace kassablad.app.Server.Controllers
 {
+    // [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class KassaContainerController : ControllerBase
     {
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
 
-        public KassaContainerController(ApplicationDbContext context)
+        public KassaContainerController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
+            _userManager = userManager;
             _context = context;
         }
 
@@ -26,6 +32,7 @@ namespace kassablad.app.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<KassaContainer>>> GetKassaContainers()
         {
+            
             return await _context.KassaContainers.ToListAsync();
         }
 
@@ -77,8 +84,11 @@ namespace kassablad.app.Server.Controllers
         // POST: api/KassaContainer
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<KassaContainer>> PostKassaContainer(KassaContainer kassaContainer)
+        public async Task<ActionResult<KassaContainer>> PostKassaContainer([FromForm] KassaContainer kassaContainer)
         {
+            var user = await _userManager.GetUserAsync(User);
+            kassaContainer.ApplicationUsers.Add(user);
+
             _context.KassaContainers.Add(kassaContainer);
             await _context.SaveChangesAsync();
 

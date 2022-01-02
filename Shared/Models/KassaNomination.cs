@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace kassablad.app.Server.Models;
+namespace kassablad.app.Shared.Models;
 public class KassaNomination {
     public int KassaNominationId { get; set; }
     [Required]
