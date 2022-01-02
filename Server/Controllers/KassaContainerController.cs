@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using kassablad.app.Server.Data;
-using kassablad.app.Shared.Models;
+using kassablad.app.Server.Models;
 using kassablad.app.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -84,10 +84,26 @@ namespace kassablad.app.Server.Controllers
         // POST: api/KassaContainer
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<KassaContainer>> PostKassaContainer([FromForm] KassaContainer kassaContainer)
+        public async Task<ActionResult<KassaContainer>> PostKassaContainer([FromForm] KassaContainerDto kcDto)
         {
             var user = await _userManager.GetUserAsync(User);
-            kassaContainer.ApplicationUsers.Add(user);
+            var kassaContainer = new KassaContainer() 
+            {
+                Active = kcDto.Active,
+                Activiteit = kcDto.Activiteit,
+                Afroomkluis = kcDto.Afroomkluis,
+                BeginUur = kcDto.BeginUur,
+                EindUur = kcDto.EindUur,
+                Bezoekers = kcDto.Bezoekers,
+                Concept = kcDto.Concept,
+                Notes = kcDto.Notes,
+                InkomstBar = kcDto.InkomstBar,
+                InkomstLidkaart = kcDto.InkomstLidkaart,
+                CreatedBy = user.Id,
+                UpdatedBy = user.Id,
+                DateAdded = DateTime.Now,
+                DateUpdated = DateTime.Now
+            };
 
             _context.KassaContainers.Add(kassaContainer);
             await _context.SaveChangesAsync();

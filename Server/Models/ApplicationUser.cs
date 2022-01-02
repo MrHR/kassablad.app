@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace kassablad.app.Shared.Models;
+namespace kassablad.app.Server.Models;
 
 public class ApplicationUser : IdentityUser
 {

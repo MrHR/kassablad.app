@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace kassablad.app.Shared.Models;
+namespace kassablad.app.Server.Models;
 public class KassaContainer 
 {
     public int KassaContainerId { get; set; }
@@ -12,9 +12,9 @@ public class KassaContainer
     [Required]
     public DateTime DateUpdated { get; set; }
     [Required]
-    public int UpdatedBy { get; set; }
+    public string? UpdatedBy { get; set; }
     [Required]
-    public int CreatedBy { get; set; }
+    public string? CreatedBy { get; set; }
     [Required]
     public string? Activiteit { get; set; }
     public DateTime BeginUur { get; set; }

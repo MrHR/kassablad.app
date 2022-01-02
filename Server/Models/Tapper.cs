@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace kassablad.app.Shared.Models;
+namespace kassablad.app.Server.Models;
 
 public class Tapper {
     public int TapperId { get; set; }
@@ -11,7 +11,7 @@ public class Tapper {
     [Required]
     public DateTime DateUpdated { get; set; }
     [Required]
-    public int CreatedBy { get; set; }
+    public string? CreatedBy { get; set; }
     [Required]
     public int UpdatedBy { get; set; }
     [Required]

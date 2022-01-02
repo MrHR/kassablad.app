@@ -2,11 +2,10 @@
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @using kassablad.app.Shared
-@using kassablad.app.Shared.Models
 @attribute [Authorize]
 @inject HttpClient Http
 @using Microsoft.Extensions.Logging
-@inject ILogger<KassaContainer> Logger
+@inject ILogger<KassaContainerDto> Logger
 
 <PageTitle>Kassablad</PageTitle>
 
@@ -31,7 +30,6 @@
         <br/>
         <RadzenButton
             IsBusy=@busy 
-            Click=@OnBusyClick 
             Text="Start" 
             type="submit" 
         />
@@ -39,7 +37,7 @@
 </div>
 
 @code {
-    private KassaContainer kassaContainer = new() {
+    private KassaContainerDto kassaContainer = new() {
         DateAdded = DateTime.Now,
         DateUpdated = DateTime.Now,
         Active = true,
@@ -53,14 +51,12 @@
             "Ander"
         };
     bool busy;
-
     async Task OnBusyClick()
     {
         busy = true;
         await Task.Delay(2000);
         busy = false;
     }
-
     private void HandleValidSubmit()
     {
         Logger.LogInformation("Handlesubmit called");

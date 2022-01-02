@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace kassablad.app.Shared.Models;
+namespace kassablad.app.Server.Models;
 public class Consumptie {
     public int ConsumptieId { get; set; }
     public bool Active { get; set; }
@@ -10,7 +10,7 @@ public class Consumptie {
     public string? Type { get; set; }
     [Required]
     public DateTime DateUpdated { get; set; }
-    public int CreatedBy { get; set; }
+    public string? CreatedBy { get; set; }
     public int UpdatedBy { get; set; }
     public string? Naam { get; set; }
     [Column(TypeName = "decimal(18,2)")]

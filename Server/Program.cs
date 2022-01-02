@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using kassablad.app.Server.Data;
-using kassablad.app.Shared.Models;
+using kassablad.app.Server.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 

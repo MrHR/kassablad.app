@@ -24,7 +24,7 @@ public class KassaContainerDto {
     [Required]
     public int UpdatedBy { get; set; }
     [Required]
-    public int CreatedBy { get; set; }
+    public string? CreatedBy { get; set; }
     [Required]
     public string? Activiteit { get; set; }
     public DateTime BeginUur { get; set; }

@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace kassablad.app.Shared.Models;
+namespace kassablad.app.Server.Models;
 public class KassaNomination {
     public int KassaNominationId { get; set; }
     [Required]
@@ -11,7 +11,7 @@ public class KassaNomination {
     [Required]
     public DateTime DateUpdated { get; set; }
     [Required]
-    public int CreatedBy { get; set; }
+    public string? CreatedBy { get; set; }
     [Required]
     public int Amount { get; set; }
     [Required]

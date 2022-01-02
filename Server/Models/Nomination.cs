@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace kassablad.app.Shared.Models;
+namespace kassablad.app.Server.Models;
 public class Nomination {
     public int NominationId { get; set; }
     [Required]
@@ -12,7 +12,7 @@ public class Nomination {
     [Required]
     public int UpdatedBy { get; set; }
     [Required]
-    public int CreatedBy { get; set; }
+    public string? CreatedBy { get; set; }
     [Required]
     public int DefaultAmount { get; set; }
     public string Total { get; set; } = String.Empty;

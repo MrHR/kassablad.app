@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace kassablad.app.Shared.Models;
+namespace kassablad.app.Server.Models;
 public class Kassa {
     public int KassaId { get; set; }
     [Required]
@@ -12,7 +12,7 @@ public class Kassa {
     [Required]
     public int UpdatedBy { get; set; }
     [Required]
-    public int CreatedBy { get; set; }
+    public string? CreatedBy { get; set; }
     [Required]
     public int KassaContainerId { get; set; }
     [Required]

@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace kassablad.app.Shared.Models;
+namespace kassablad.app.Server.Models;
 
 public class Nom {
     [Required]
