@@ -13,18 +13,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace kassablad.app.Shared;
 
+// Model to use when posting/putting to controller
 public class KassaContainerDto {
     public int KassaContainerId { get; set; }
-    [Required]
-    public bool Active { get; set; }
-    [Required]
-    public DateTime DateAdded { get; set; }
-    [Required]
-    public DateTime DateUpdated { get; set; }
-    [Required]
-    public int UpdatedBy { get; set; }
-    [Required]
-    public string? CreatedBy { get; set; }
     [Required]
     public string? Activiteit { get; set; }
     public DateTime BeginUur { get; set; }
@@ -35,4 +26,27 @@ public class KassaContainerDto {
     public decimal InkomstBar { get; set; }
     public decimal InkomstLidkaart { get; set; }
     public bool Concept { get; set; }
+    public DateTime DateAdded { get; set; }
+    public DateTime DateUpdated { get; set; }
+}
+
+// Model to use when returning from controller
+public class KassaContainerReturnDto {
+    [Required]
+    public int KassaContainerId { get; set; }
+    public string? CreatedBy { get; set; }
+    public string? UpdatedBy { get; set; }
+    [Required]
+    public string? Activiteit { get; set; }
+    public DateTime BeginUur { get; set; }
+    public DateTime EindUur { get; set; }
+    public string? Notes { get; set; }
+    public int Bezoekers { get; set; }
+    public decimal Afroomkluis { get; set; }
+    public decimal InkomstBar { get; set; }
+    public decimal InkomstLidkaart { get; set; }
+    public bool Concept { get; set; }
+    public DateTime DateAdded { get; set; }
+    public DateTime DateUpdated { get; set; }
+    public List<UserDto> Tappers { get; set; }
 }

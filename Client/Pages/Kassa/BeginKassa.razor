@@ -1,0 +1,65 @@
+@page "/beginkassa"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using kassablad.app.Shared
+@attribute [Authorize]
+@using System.Net.Http
+@inject HttpClient Http
+@using System.Net.Http.Json @*https://docs.microsoft.com/en-us/aspnet/core/blazor/call-web-api?view=aspnetcore-6.0&pivots=webassembly *@
+@using Microsoft.Extensions.Logging
+@inject ILogger<KassaContainerDto> Logger
+@inject DialogService DialogService
+
+<PageTitle>Beginkassa</PageTitle>
+
+<h1>BeginKassa</h1>
+
+<p>Tel je beginkassa even na!</p>
+
+<div class="content-container">
+    <CoinCounter />
+    <RadzenButton Text="test" ButtonStyle="ButtonStyle.Secondary" Click="@ShowInlineDialog" />
+</div>
+
+@code {
+    int orderID = 10248;
+
+    protected override void OnInitialized()
+    {
+        DialogService.OnOpen += Open;
+        DialogService.OnClose += Close;
+    }
+
+    public void Dispose()
+    {
+        // The DialogService is a singleton so it is advisable to unsubscribe.
+        DialogService.OnOpen -= Open;
+        DialogService.OnClose -= Close;
+    }
+
+    void Open(string title, Type type, Dictionary<string, object> parameters, DialogOptions options)
+    {
+        Console.WriteLine("Dialog opened");
+    }
+
+    void Close(dynamic result)
+    {
+        Console.WriteLine($"Dialog closed");
+    }
+    async Task ShowInlineDialog()
+    {
+     var result = await DialogService.OpenAsync("Simple Dialog", ds =>
+        @<div>
+            <p class="mb-4">Confirm Order ID <b>@orderID</b>?</p>
+            <div class="row">
+                <div class="col">
+                    <RadzenButton Text="Ok" Click="() => ds.Close(true)" Class="mr-1" Style="width: 80px;" />
+                    <RadzenButton Text="Cancel" Click="() => ds.Close(false)" ButtonStyle="ButtonStyle.Secondary" Class="mr-1" />
+                    <RadzenButton Text="Refresh" Click="(() => { orderID = 10249; ds.Refresh(); })" ButtonStyle="ButtonStyle.Light"  Class="mr-1 float-right" />
+                </div>
+            </div>
+        </div>);
+    
+      Console.WriteLine($"Dialog result: {result}");
+    }
+}

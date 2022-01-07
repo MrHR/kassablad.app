@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace kassablad.app.Server.Controllers
 {
-    // [Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class KassaContainerController : ControllerBase
@@ -84,12 +84,13 @@ namespace kassablad.app.Server.Controllers
         // POST: api/KassaContainer
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<KassaContainer>> PostKassaContainer([FromForm] KassaContainerDto kcDto)
+        public async Task<ActionResult<KassaContainerReturnDto>> PostKassaContainer(KassaContainerDto kcDto)
         {
-            var user = await _userManager.GetUserAsync(User);
+            // map the dto to the entity model
+            ApplicationUser user = await _userManager.GetUserAsync(User);
             var kassaContainer = new KassaContainer() 
             {
-                Active = kcDto.Active,
+                Active = true,
                 Activiteit = kcDto.Activiteit,
                 Afroomkluis = kcDto.Afroomkluis,
                 BeginUur = kcDto.BeginUur,
@@ -104,11 +105,42 @@ namespace kassablad.app.Server.Controllers
                 DateAdded = DateTime.Now,
                 DateUpdated = DateTime.Now
             };
-
             _context.KassaContainers.Add(kassaContainer);
             await _context.SaveChangesAsync();
+            
+            // Save the current tapper to the joining table
+            var kcApplicationUsers = new KassaContainerApplicationUser()
+            {
+                ApplicationUserId = user.Id,
+                KassaContainerId = kassaContainer.KassaContainerId,
+                StartTime = DateTime.Now
+            };
+            _context.KassaContainerApplicationUsers.Add(kcApplicationUsers);
+            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetKassaContainer", new { id = kassaContainer.KassaContainerId }, kassaContainer);
+            // map the kassacontainer to the return dto
+            KassaContainerReturnDto kassaContainerReturnDto = new KassaContainerReturnDto {
+                KassaContainerId = kassaContainer.KassaContainerId,
+                Activiteit = kassaContainer.Activiteit,
+                Afroomkluis = kassaContainer.Afroomkluis,
+                BeginUur = kassaContainer.BeginUur,
+                EindUur = kassaContainer.EindUur,
+                Bezoekers = kassaContainer.Bezoekers,
+                Concept = kassaContainer.Concept,
+                Notes = kassaContainer.Notes,
+                InkomstBar = kassaContainer.InkomstBar,
+                InkomstLidkaart = kassaContainer.InkomstLidkaart,
+                CreatedBy = kassaContainer.CreatedBy,
+                UpdatedBy = kassaContainer.UpdatedBy,
+                DateAdded = kassaContainer.DateAdded,
+                DateUpdated = kassaContainer.DateUpdated,
+                Tappers = kassaContainer.ApplicationUsers.Select(u => new UserDto {
+                    Email = u.Email,
+                    Id = u.Id
+                }).ToList()
+            };
+
+            return CreatedAtAction("GetKassaContainer", new { id = kassaContainer.KassaContainerId }, kassaContainerReturnDto);
         }
 
         // DELETE: api/KassaContainer/5

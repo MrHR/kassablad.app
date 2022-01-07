@@ -1,0 +1,24 @@
+<RadzenCard class="@ClassName">
+    <div class="coinWrapper">
+        <div class="coin">
+            @Value
+            <sub>
+                @Valuta
+            </sub>
+        </div>
+    </div>
+    <div class="coinCount">
+        <span>x</span> @CoinCount
+    </div>
+</RadzenCard>
+
+@code {
+    [Parameter]
+    public string? ClassName { get; set; }
+    [Parameter]
+    public string? Value { get; set; }
+    [Parameter]
+    public string? Valuta { get; set; }
+    [Parameter]
+    public int CoinCount { get; set; }
+}

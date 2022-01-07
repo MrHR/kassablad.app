@@ -1,0 +1,62 @@
+.coinWrapperBox:hover {
+    box-shadow: none;
+    cursor:pointer;
+}
+.coinCounter {
+    display:flex;
+    gap:20px;
+    flex-wrap: wrap;
+}
+.coinCounter .card {
+    width:200px;
+    height:200px;
+}
+.coinWrapper {
+    padding:5px;
+    display:flex;
+    justify-content: center;
+}
+.coin-5cent .coin {
+    width:21.25mm;
+    height:21.25mm;
+    background-color:#CD7F32;
+    outline:1px solid #b46e27;
+    color:#2b2400;
+}
+.coin-10cent .coin {
+    width:19.75mm;
+    height:19.75mm;  
+    background-color:#FFD700;
+    outline:2px solid #f3cf01;
+    color:#2b2400;
+}
+.coin-20cent .coin {
+    width:22.25mm;
+    height:22.25mm;
+    background-color:#FFD700;
+    outline:2px solid #f3cf01;
+    color:#2b2400;
+}
+.coin-50cent .coin {
+    width:24.25mm;
+    height:24.25mm;
+    background-color:#FFD700;
+    outline:2px solid #f3cf01;
+    color:#2b2400;
+}
+.coin-1euro .coin {
+    width:23.25mm;
+    height:23.25mm;
+    background-color: #C0C0C0;
+    border:3mm solid #FFD700;
+    outline:2px solid #f3cf01;
+    color:#2b2400;
+}
+.coin-2euro .coin {
+    width:25.75mm;
+    height:25.75mm;
+    background-color:#FFD700;
+    border:3.25mm solid #C0C0C0;
+    outline:2px solid #b8b8b8;
+    color:#2b2400;
+}

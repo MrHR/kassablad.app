@@ -31,7 +31,9 @@ public class KassaContainer
 
     public virtual ICollection<Kassa>? Kassas { get; set; }
     public virtual ICollection<ConsumptieCount>? ConsumptieCounts { get; set; }
-    public ICollection<ApplicationUser>? ApplicationUsers { get; set; } // Check KassaContainerTapper.cs
-    
+
+    // Many-to-may relationship with kassaContainerApplicationUsers table
+    // More info: KassaContainerApplicationuser.cs
+    public ICollection<ApplicationUser>? ApplicationUsers { get; set; }
     public List<KassaContainerApplicationUser>? KassaContainerApplicationUsers { get; set; }
 }

@@ -1,0 +1,46 @@
+<div class="coinCounter">
+    <Coin 
+        ClassName="coin-5cent coinWrapperBox"
+        Value="5"
+        Valuta="cent"
+        CoinCount="10"
+    />
+    <Coin 
+        ClassName="coin-10cent coinWrapperBox"
+        Value="10" 
+        Valuta="cent"
+        CoinCount="53"
+    />
+    <Coin 
+        ClassName="coin-20cent coinWrapperBox"
+        Value="20" 
+        Valuta="cent"
+        CoinCount="7"
+    />
+    <Coin 
+        ClassName="coin-50cent coinWrapperBox"
+        Value="50" 
+        Valuta="cent"
+        CoinCount="10"
+    />
+    <Coin
+        ClassName="coin-1euro coinWrapperBox"
+        Value="1" 
+        Valuta="euro"
+        CoinCount="12"
+    />
+    <Coin
+        ClassName="coin-2euro coinWrapperBox"
+        Value="2" 
+        Valuta="euro"
+        CoinCount="8"
+    />
+</div>
+
+
+@code {
+    // Demonstrates how a parent component can supply parameters
+    [Parameter]
+    public string? Title { get; set; }
+    
+}

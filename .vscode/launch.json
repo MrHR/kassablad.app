@@ -6,32 +6,36 @@
             "type": "coreclr",
             "request": "attach"
         },
-
-    {
-        "name": ".NET Core Launch (web)",
-        "type": "coreclr",
-        "request": "launch",
-        "preLaunchTask": "build",
-        "program": "${workspaceFolder}/bin/Debug/net6.0/kassablad.app.Server.dll",
-        "args": [],
-        "cwd": "${workspaceFolder}",
-        "stopAtEntry": false,
-        "serverReadyAction": {
-            "action": "openExternally",
-            "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+        {
+            "name": ".NET Core Launch (web)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/bin/Debug/net6.0/kassablad.app.Server.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            }
         },
-        "env": {
-            "ASPNETCORE_ENVIRONMENT": "Development"
-        },
-        "sourceFileMap": {
-            "/Views": "${workspaceFolder}/Views"
-        }
-    },
         {
             "name": "Launch and Debug Standalone Blazor WebAssembly App",
             "type": "blazorwasm",
             "request": "launch",
             "cwd": "${workspaceFolder}/Server"
+        },
+        {
+            "type": "blazorwasm",
+            "request": "attach",
+            "name": "Attach to Existing Blazor WebAssembly Application"
         }
     ]
 }
