@@ -1,9 +1,12 @@
+@inject DialogService DialogService
+
 <div class="coinCounter">
     <Coin 
         ClassName="coin-5cent coinWrapperBox"
         Value="5"
         Valuta="cent"
         CoinCount="10"
+        Click="ShowInlineDialog"
     />
     <Coin 
         ClassName="coin-10cent coinWrapperBox"
@@ -42,5 +45,23 @@
     // Demonstrates how a parent component can supply parameters
     [Parameter]
     public string? Title { get; set; }
+
+    async Task ShowInlineDialog()
+    {
+        Console.WriteLine("test");
+        var result = await DialogService.OpenAsync("Simple Dialog", ds =>
+            @<div>
+                <p class="mb-4">Confirm Order ID <b>123</b>?</p>
+                <div class="row">
+                    <div class="col">
+                        <RadzenButton Text="Ok" Click="() => ds.Close(true)" Class="mr-1" Style="width: 80px;" />
+                        <RadzenButton Text="Cancel" Click="() => ds.Close(false)" ButtonStyle="ButtonStyle.Secondary" Class="mr-1" />
+                        <RadzenButton Text="Refresh" Click="(() => { ds.Refresh(); })" ButtonStyle="ButtonStyle.Light"  Class="mr-1 float-right" />
+                    </div>
+                </div>
+            </div>);
+    
+        Console.WriteLine($"Dialog result: {result}");
+    }
     
 }

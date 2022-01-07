@@ -1,4 +1,4 @@
-<RadzenCard class="@ClassName">
+<RadzenCard class="@ClassName" @onclick="@OnClick">
     <div class="coinWrapper">
         <div class="coin">
             @Value
@@ -21,4 +21,29 @@
     public string? Valuta { get; set; }
     [Parameter]
     public int CoinCount { get; set; }
+    [Parameter]
+    public EventCallback<MouseEventArgs> Click { get; set; }
+    bool clicking;
+    /// <summary>
+    /// Handles the <see cref="E:Click" /> event.
+    /// </summary>
+    /// <param name="args">The <see cref="MouseEventArgs"/> instance containing the event data.</param>
+    public async Task OnClick(MouseEventArgs args)
+    {
+        if (clicking)
+        {
+            return;
+        }
+
+        try
+        {
+            clicking = true;
+
+            await Click.InvokeAsync(args);
+        }
+        finally
+        {
+            clicking = false;
+        }
+    }
 }
