@@ -1,0 +1,79 @@
+@page "/kassa"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using kassablad.app.Shared
+@attribute [Authorize]
+@using System.Net.Http
+@inject HttpClient Http
+@using System.Net.Http.Json @*https://docs.microsoft.com/en-us/aspnet/core/blazor/call-web-api?view=aspnetcore-6.0&pivots=webassembly *@
+@using Microsoft.Extensions.Logging
+@inject ILogger<KassaContainerDto> Logger
+@inject DialogService DialogService
+
+<PageTitle>Kassa</PageTitle>
+
+@if(kassaType == "beginKassa")
+{
+    <h1>BeginKassa</h1>
+} else {
+    <h1>EindKassa</h1>
+}
+
+<p>Tel je beginkassa even na!</p>
+
+<div class="content-container">
+    <div class="coinCounter">
+        <Coin 
+            ClassName="coin-5cent coinWrapperBox"
+            Text="5"
+            Value="@((decimal)0.05)"
+            Valuta="cent"
+            CoinCount="10"
+        />
+        <Coin 
+            ClassName="coin-10cent coinWrapperBox"
+            Text="10" 
+            Value="@((decimal)0.10)"
+            Valuta="cent"
+            CoinCount="53"
+        />
+        <Coin 
+            ClassName="coin-20cent coinWrapperBox"
+            Text="20" 
+            Value="@((decimal)0.20)"
+            Valuta="cent"
+            CoinCount="7"
+        />
+        <Coin 
+            ClassName="coin-50cent coinWrapperBox"
+            Text="50" 
+            Value="@((decimal)0.50)"
+            Valuta="cent"
+            CoinCount="10"
+        />
+        <Coin
+            ClassName="coin-1euro coinWrapperBox"
+            Text="1" 
+            Value="@((decimal)1.00)"
+            Valuta="euro"
+            CoinCount="12"
+        />
+        <Coin
+            ClassName="coin-2euro coinWrapperBox"
+            Text="2" 
+            Value="@((decimal)2.00)"
+            Valuta="euro"
+            CoinCount="8"
+        />
+    </div>
+</div>
+
+@code {
+    @* 
+        Keep beginkassa data here
+        but sync object with databbase
+        when kassa = counted change status to counted
+     *@
+
+    string kassaType = "beginKassa";
+}

@@ -24,3 +24,6 @@
     opacity: 0.5;
     font-size: 24px;
 }
+#app .rz-dialog-content div p {
+    color:black !important;
+}

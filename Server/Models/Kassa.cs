@@ -1,6 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace kassablad.app.Server.Models;
+public enum Statuses {
+    Open,
+    Counted,
+    Closed
+}
 public class Kassa {
     public int KassaId { get; set; }
     [Required]
@@ -17,6 +22,8 @@ public class Kassa {
     public int KassaContainerId { get; set; }
     [Required]
     public string? Type { get; set; }
+    [Required]
+    public Statuses Status { get; set; }
     public virtual KassaContainer? KassaContainer { get; set; }
     public virtual ICollection<KassaNomination>? KassaNominations { get; set; }
 }

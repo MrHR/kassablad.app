@@ -75,7 +75,7 @@
         else
         {
             Console.WriteLine($"Success! Rerouting");
-            NavigationManager.NavigateTo("/beginkassa", false);
+            NavigationManager.NavigateTo("/kassa", false);
         }
 
         var content = await response.Content.ReadFromJsonAsync<KassaContainerDto>();

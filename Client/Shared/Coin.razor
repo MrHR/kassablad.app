@@ -1,14 +1,16 @@
-<RadzenCard class="@ClassName" @onclick="@OnClick">
+@inject DialogService DialogService
+
+<RadzenCard class="@ClassName" @onclick="@openDialog">
     <div class="coinWrapper">
         <div class="coin">
-            @Value
+            @Text
             <sub>
                 @Valuta
             </sub>
         </div>
     </div>
     <div class="coinCount">
-        <span>x</span> @CoinCount
+        € @Total()
     </div>
 </RadzenCard>
 
@@ -16,11 +18,39 @@
     [Parameter]
     public string? ClassName { get; set; }
     [Parameter]
-    public string? Value { get; set; }
+    public string? Text { get; set; }
+    [Parameter]
+    public decimal Value { get; set; }
     [Parameter]
     public string? Valuta { get; set; }
     [Parameter]
     public int CoinCount { get; set; }
+    private decimal Total() {
+        return Value * CoinCount;
+    }
+    public async Task openDialog() {
+        Console.WriteLine("test");
+        var result = await DialogService.OpenAsync("Hoeveelheid", ds =>
+            @<div>
+                <p class="mb-4">€ @Value x  <RadzenNumeric TValue="int" @bind-Value=@CoinCount/></p>
+                <div class="row">
+                    <div class="col">
+                        <RadzenButton Text="Ok" Click="() => ds.Close(true)" Class="mr-1" Style="width: 80px;" />
+                        <RadzenButton Text="Cancel" Click="() => ds.Close(false)" ButtonStyle="ButtonStyle.Secondary" Class="mr-1" />
+                    </div>
+                </div>
+            </div>,
+            new DialogOptions() { 
+                CloseDialogOnOverlayClick = true,
+                AutoFocusFirstElement = false 
+            });
+    
+        Console.WriteLine($"Dialog result: {result}");
+    }
+
+    @* 
+    THIS IS CODE FOR HANDLING CLICK EVENTS FROM COMPONENT
+
     [Parameter]
     public EventCallback<MouseEventArgs> Click { get; set; }
     bool clicking;
@@ -45,5 +75,5 @@
         {
             clicking = false;
         }
-    }
+    } *@
 }

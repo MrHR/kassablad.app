@@ -2,3 +2,6 @@
     background-color:#4d4c4d !important;
     border:1px solid #686768;
 }
+#app .rz-dialog-content div p {
+    color:black !important;
+}
