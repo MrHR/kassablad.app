@@ -38,7 +38,7 @@ namespace kassablad.app.Server.Controllers
 
         // GET: api/KassaContainer/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<KassaContainer>> GetKassaContainer(int id)
+        public async Task<ActionResult<KassaContainerDto>> GetKassaContainer(int id)
         {
             var kassaContainer = await _context.KassaContainers.FindAsync(id);
 
@@ -47,20 +47,69 @@ namespace kassablad.app.Server.Controllers
                 return NotFound();
             }
 
-            return kassaContainer;
+            var kassaContainerDto = new KassaContainerDto()
+            {
+                Activiteit = kassaContainer.Activiteit,
+                Afroomkluis = kassaContainer.Afroomkluis,
+                BeginUur = kassaContainer.BeginUur,
+                Bezoekers = kassaContainer.Bezoekers,
+                DateAdded = kassaContainer.DateAdded,
+                DateUpdated = kassaContainer.DateUpdated,
+                EindUur = kassaContainer.EindUur,
+                FKassaId = kassaContainer.FKassaId,
+                InkomstBar = kassaContainer.InkomstBar,
+                InkomstLidkaart = kassaContainer.InkomstLidkaart,
+                KassaContainerId = kassaContainer.KassaContainerId,
+                Notes = kassaContainer.Notes,
+                State = kassaContainer.State.ToString()
+            };
+
+            return kassaContainerDto;
         }
 
         // PUT: api/KassaContainer/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutKassaContainer(int id, KassaContainer kassaContainer)
+        public async Task<IActionResult> PutKassaContainer(int id, KassaContainerDto kassaContainerDto)
         {
-            if (id != kassaContainer.KassaContainerId)
+            if (id != kassaContainerDto.KassaContainerId)
             {
                 return BadRequest();
             }
 
+            ApplicationUser user = await _userManager.GetUserAsync(User);
+            //Don't save these fields
+            var excluded = new[] 
+            { 
+                "CreatedBy", 
+                "DateAdded",
+                "FKassaId"
+            };
+            var kassaContainer = new KassaContainer()
+            {
+                KassaContainerId = kassaContainerDto.KassaContainerId,
+                Active = true,
+                Activiteit = kassaContainerDto.Activiteit,
+                Afroomkluis = kassaContainerDto.Afroomkluis,
+                BeginUur = kassaContainerDto.BeginUur,
+                EindUur = kassaContainerDto.EindUur,
+                Bezoekers = kassaContainerDto.Bezoekers,
+                UpdatedBy = user.Id,
+                DateUpdated = DateTime.Now,
+                InkomstLidkaart = kassaContainerDto.InkomstLidkaart,
+                InkomstBar = kassaContainerDto.InkomstBar,
+                Notes = kassaContainerDto.Notes,
+                State = (States) Enum.Parse(typeof(States), kassaContainerDto.State, true)
+            };
+
+            //Entities can have multiple states: https://docs.microsoft.com/en-us/ef/ef6/saving/change-tracking/entity-state
+            //Use this to not save certain fields that should be unmutable
             _context.Entry(kassaContainer).State = EntityState.Modified;
+
+            foreach(var name in excluded)
+            {
+                _context.Entry(kassaContainer).Property(name).IsModified = false;
+            }
 
             try
             {
@@ -96,16 +145,21 @@ namespace kassablad.app.Server.Controllers
                 BeginUur = kcDto.BeginUur,
                 EindUur = kcDto.EindUur,
                 Bezoekers = kcDto.Bezoekers,
-                Concept = kcDto.Concept,
+                State = (States) Enum.Parse(typeof(States), kcDto.State, true), //parse string to enum
                 Notes = kcDto.Notes,
                 InkomstBar = kcDto.InkomstBar,
                 InkomstLidkaart = kcDto.InkomstLidkaart,
                 CreatedBy = user.Id,
                 UpdatedBy = user.Id,
                 DateAdded = DateTime.Now,
-                DateUpdated = DateTime.Now
+                DateUpdated = DateTime.Now,
+                FKassaId = kcDto.FKassaId
             };
             _context.KassaContainers.Add(kassaContainer);
+
+            //Save the kassacontainer to the FKassa Collection
+            var fKassa = _context.FKassa.Where(x => x.FKassaId == kassaContainer.FKassaId).FirstOrDefault();
+            fKassa.KassaContainers.Add(kassaContainer);
             await _context.SaveChangesAsync();
             
             // Save the current tapper to the joining table
@@ -126,7 +180,7 @@ namespace kassablad.app.Server.Controllers
                 BeginUur = kassaContainer.BeginUur,
                 EindUur = kassaContainer.EindUur,
                 Bezoekers = kassaContainer.Bezoekers,
-                Concept = kassaContainer.Concept,
+                State = kassaContainer.State.ToString(),
                 Notes = kassaContainer.Notes,
                 InkomstBar = kassaContainer.InkomstBar,
                 InkomstLidkaart = kassaContainer.InkomstLidkaart,
@@ -134,6 +188,7 @@ namespace kassablad.app.Server.Controllers
                 UpdatedBy = kassaContainer.UpdatedBy,
                 DateAdded = kassaContainer.DateAdded,
                 DateUpdated = kassaContainer.DateUpdated,
+                FKassaId = kassaContainer.FKassaId,
                 Tappers = kassaContainer.ApplicationUsers.Select(u => new UserDto {
                     Email = u.Email,
                     Id = u.Id

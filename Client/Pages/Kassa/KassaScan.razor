@@ -1,0 +1,143 @@
+@page "/kassascan"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using kassablad.app.Shared
+@using kassablad.app.Client.Data
+@attribute [Authorize]
+@using System.Net.Http
+@inject HttpClient Http
+@using System.Net.Http.Json @*https://docs.microsoft.com/en-us/aspnet/core/blazor/call-web-api?view=aspnetcore-6.0&pivots=webassembly *@
+@using Microsoft.Extensions.Logging
+@inject NavigationManager NavigationManager
+@inject ILogger<FKassaDto> Logger
+
+<PageTitle>Kassablad</PageTitle>
+
+<h1>Kassa Selectie</h1>
+
+<p>Geef de naam van je kassa in.</p>
+
+<div class="content-container">
+    @* TODO: Scan Kassa_Naam => Check kassa state, open kassa state where last user left of *@
+    <h2>Naam Kassa</h2>
+    <p>Geef de naam van je kassa in. Deze vind je onder de Qr-code op de kassa.</p>
+    <EditForm Model="@FKassaDto" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <CustomValidation @ref="customValidation" />
+        <ValidationSummary />
+        <RadzenTextBox Class="w-100" @bind-Value="FKassaDto.FKassaNaam" /><br/>
+        <br/>
+        <RadzenButton
+            IsBusy=@busy 
+            Text="Zoek Kassa" 
+            type="submit" 
+        />
+    </EditForm>
+</div>
+
+@code {
+    private string? errorMessage;
+    bool busy;
+    private FKassaDto FKassaDto = new();
+    private CustomValidation? customValidation;
+    private async Task HandleValidSubmit()
+    {
+        busy = true;
+
+        customValidation?.ClearErrors();    
+
+        var kcDto = new KassaContainerDto();
+        var errors = new Dictionary<string, List<string>>();
+        using var response = await Http.GetAsync($"api/FKassa/{FKassaDto.FKassaNaam}");
+
+        // Add errors if any
+        if(!response.IsSuccessStatusCode)
+        {
+            errorMessage = response.ReasonPhrase;
+            Console.WriteLine($"There was an error! {errorMessage}");
+
+            errors.Add(nameof(FKassaDto.FKassaNaam),
+                new() { $"Kassa {FKassaDto.FKassaNaam} werd niet gevonden." });
+        }
+
+        // Display errors if any else rerout
+        if(errors.Any())
+        {
+            customValidation?.DisplayErrors(errors);
+            busy = false;
+
+            return;
+        }
+        else
+        {
+            var content = await response.Content.ReadFromJsonAsync<FKassaDto>();
+            var kassaContainerDto = content?.KassaContainerDto;
+
+            Console.WriteLine($"content: {content?.KassaContainerDto}");
+
+            // If kassaContainer check state and goto right page
+            if(kassaContainerDto != null)
+            {
+                busy = false;
+                switch(kassaContainerDto?.State)
+                {
+                    case "A":
+                        Console.WriteLine($"Rerouting to kassablad with id: {kassaContainerDto.KassaContainerId}");
+                        NavigationManager.NavigateTo($"/kassablad/{kassaContainerDto.KassaContainerId}", false);         
+                        break;
+                    case "B":
+                        Console.WriteLine($"Rerouting to kassa with container id: {kassaContainerDto.KassaContainerId}");
+                        NavigationManager.NavigateTo($"/kassa/{kassaContainerDto.KassaContainerId}", false);
+                        break;
+                    case "C":
+                        Console.WriteLine($"Rerouting to kassafinal with container id: {kassaContainerDto.KassaContainerId}");
+                        NavigationManager.NavigateTo($"/kassafinal/{kassaContainerDto.KassaContainerId}", false);
+                        break;
+                }
+            }
+            else if(content != null)
+            {
+                //Create kassaContainer and save FKassaId to it
+                var kassaContainerReturnDto = await createKassaContainer(content);
+
+                // If success then rerout to kassablad
+                if(kassaContainerReturnDto.KassaContainerId != 0)
+                {
+                    NavigationManager.NavigateTo($"/kassablad/{kassaContainerReturnDto.KassaContainerId}", false);
+                }
+                else
+                {
+                    busy = false;
+                    return;
+                }
+            }
+            else
+            {
+                Console.WriteLine($"Error! Zowel kassacontainerDto als content zijn null");
+            }
+        }
+    }
+
+    private async Task<KassaContainerReturnDto> createKassaContainer(FKassaDto fKassa)
+    {
+        var content = new KassaContainerReturnDto();
+        KassaContainerDto KassaContainerDto = new() {
+            FKassaId = fKassa.FKassaId,
+            State = "A"
+        };
+        using var response = await Http.PostAsJsonAsync("api/KassaContainer", KassaContainerDto);
+
+        if(!response.IsSuccessStatusCode)
+        {
+            errorMessage = response.ReasonPhrase;
+            Console.WriteLine($"There was an error with creating the container! {errorMessage}");
+        }
+        else 
+        {
+            Console.WriteLine($"Success!");
+            content = await response.Content.ReadFromJsonAsync<KassaContainerReturnDto>();
+        }
+
+        return content;
+    }
+}

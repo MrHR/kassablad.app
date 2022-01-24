@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using kassablad.app.Server.Data;
 
@@ -11,9 +12,10 @@ using kassablad.app.Server.Data;
 namespace kassablad.app.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220123154903_addFKassa")]
+    partial class addFKassa
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -105,7 +107,7 @@ namespace kassablad.app.Server.Migrations
 
                     b.HasIndex("Use");
 
-                    b.ToTable("Keys", (string)null);
+                    b.ToTable("Keys");
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.PersistedGrant", b =>
@@ -262,7 +264,7 @@ namespace kassablad.app.Server.Migrations
 
                     b.HasKey("ConsumptieId");
 
-                    b.ToTable("Consumpties", (string)null);
+                    b.ToTable("Consumpties");
                 });
 
             modelBuilder.Entity("kassablad.app.Server.Models.ConsumptieCount", b =>
@@ -304,40 +306,7 @@ namespace kassablad.app.Server.Migrations
 
                     b.HasIndex("KassaContainerId");
 
-                    b.ToTable("ConsumptieCounts", (string)null);
-                });
-
-            modelBuilder.Entity("kassablad.app.Server.Models.FKassa", b =>
-                {
-                    b.Property<int>("FKassaId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FKassaId"), 1L, 1);
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DateAdded")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateUpdated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("FKassaNaam")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UpdatedBy")
-                        .HasColumnType("int");
-
-                    b.HasKey("FKassaId");
-
-                    b.ToTable("FKassa", (string)null);
+                    b.ToTable("ConsumptieCounts");
                 });
 
             modelBuilder.Entity("kassablad.app.Server.Models.Kassa", b =>
@@ -378,7 +347,7 @@ namespace kassablad.app.Server.Migrations
 
                     b.HasIndex("KassaContainerId");
 
-                    b.ToTable("Kassas", (string)null);
+                    b.ToTable("Kassas");
                 });
 
             modelBuilder.Entity("kassablad.app.Server.Models.KassaContainer", b =>
@@ -393,6 +362,7 @@ namespace kassablad.app.Server.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Activiteit")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Afroomkluis")
@@ -403,6 +373,9 @@ namespace kassablad.app.Server.Migrations
 
                     b.Property<int>("Bezoekers")
                         .HasColumnType("int");
+
+                    b.Property<bool>("Concept")
+                        .HasColumnType("bit");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -417,9 +390,6 @@ namespace kassablad.app.Server.Migrations
                     b.Property<DateTime>("EindUur")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("FKassaId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("InkomstBar")
                         .HasColumnType("decimal(18,2)");
 
@@ -429,18 +399,13 @@ namespace kassablad.app.Server.Migrations
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("State")
-                        .HasColumnType("int");
-
                     b.Property<string>("UpdatedBy")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("KassaContainerId");
 
-                    b.HasIndex("FKassaId");
-
-                    b.ToTable("KassaContainers", (string)null);
+                    b.ToTable("KassaContainers");
                 });
 
             modelBuilder.Entity("kassablad.app.Server.Models.KassaContainerApplicationUser", b =>
@@ -463,7 +428,7 @@ namespace kassablad.app.Server.Migrations
 
                     b.HasIndex("KassaContainerId");
 
-                    b.ToTable("KassaContainerApplicationUsers", (string)null);
+                    b.ToTable("KassaContainerApplicationUsers");
                 });
 
             modelBuilder.Entity("kassablad.app.Server.Models.KassaNomination", b =>
@@ -507,7 +472,7 @@ namespace kassablad.app.Server.Migrations
 
                     b.HasIndex("NominationId");
 
-                    b.ToTable("KassaNominations", (string)null);
+                    b.ToTable("KassaNominations");
                 });
 
             modelBuilder.Entity("kassablad.app.Server.Models.KassaTemplate", b =>
@@ -538,7 +503,7 @@ namespace kassablad.app.Server.Migrations
 
                     b.HasKey("KassaTemplateId");
 
-                    b.ToTable("KassaTemplates", (string)null);
+                    b.ToTable("KassaTemplates");
                 });
 
             modelBuilder.Entity("kassablad.app.Server.Models.Nomination", b =>
@@ -574,7 +539,7 @@ namespace kassablad.app.Server.Migrations
 
                     b.HasKey("NominationId");
 
-                    b.ToTable("Nominations", (string)null);
+                    b.ToTable("Nominations");
                 });
 
             modelBuilder.Entity("kassablad.app.Server.Models.Tapper", b =>
@@ -611,7 +576,7 @@ namespace kassablad.app.Server.Migrations
 
                     b.HasKey("TapperId");
 
-                    b.ToTable("Tappers", (string)null);
+                    b.ToTable("Tappers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -781,17 +746,6 @@ namespace kassablad.app.Server.Migrations
                     b.Navigation("KassaContainer");
                 });
 
-            modelBuilder.Entity("kassablad.app.Server.Models.KassaContainer", b =>
-                {
-                    b.HasOne("kassablad.app.Server.Models.FKassa", "FKassa")
-                        .WithMany("KassaContainers")
-                        .HasForeignKey("FKassaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("FKassa");
-                });
-
             modelBuilder.Entity("kassablad.app.Server.Models.KassaContainerApplicationUser", b =>
                 {
                     b.HasOne("kassablad.app.Server.Models.ApplicationUser", "ApplicationUser")
@@ -827,7 +781,7 @@ namespace kassablad.app.Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("kassablad.app.Server.Models.KassaNomination.Nom#kassablad.app.Server.Models.Nom", "Nom", b1 =>
+                    b.OwnsOne("kassablad.app.Server.Models.Nom", "Nom", b1 =>
                         {
                             b1.Property<int>("KassaNominationId")
                                 .HasColumnType("int");
@@ -841,7 +795,7 @@ namespace kassablad.app.Server.Migrations
 
                             b1.HasKey("KassaNominationId");
 
-                            b1.ToTable("KassaNominations", (string)null);
+                            b1.ToTable("KassaNominations");
 
                             b1.WithOwner()
                                 .HasForeignKey("KassaNominationId");
@@ -857,7 +811,7 @@ namespace kassablad.app.Server.Migrations
 
             modelBuilder.Entity("kassablad.app.Server.Models.Nomination", b =>
                 {
-                    b.OwnsOne("kassablad.app.Server.Models.Nomination.Nom#kassablad.app.Server.Models.Nom", "Nom", b1 =>
+                    b.OwnsOne("kassablad.app.Server.Models.Nom", "Nom", b1 =>
                         {
                             b1.Property<int>("NominationId")
                                 .HasColumnType("int");
@@ -871,7 +825,7 @@ namespace kassablad.app.Server.Migrations
 
                             b1.HasKey("NominationId");
 
-                            b1.ToTable("Nominations", (string)null);
+                            b1.ToTable("Nominations");
 
                             b1.WithOwner()
                                 .HasForeignKey("NominationId");
@@ -940,11 +894,6 @@ namespace kassablad.app.Server.Migrations
             modelBuilder.Entity("kassablad.app.Server.Models.Consumptie", b =>
                 {
                     b.Navigation("ConsumptieCounts");
-                });
-
-            modelBuilder.Entity("kassablad.app.Server.Models.FKassa", b =>
-                {
-                    b.Navigation("KassaContainers");
                 });
 
             modelBuilder.Entity("kassablad.app.Server.Models.Kassa", b =>

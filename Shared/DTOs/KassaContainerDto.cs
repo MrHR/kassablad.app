@@ -16,7 +16,6 @@ namespace kassablad.app.Shared;
 // Model to use when posting/putting to controller
 public class KassaContainerDto {
     public int KassaContainerId { get; set; }
-    [Required]
     public string? Activiteit { get; set; }
     public DateTime BeginUur { get; set; }
     public DateTime EindUur { get; set; }
@@ -25,9 +24,10 @@ public class KassaContainerDto {
     public decimal Afroomkluis { get; set; }
     public decimal InkomstBar { get; set; }
     public decimal InkomstLidkaart { get; set; }
-    public bool Concept { get; set; }
+    public string? State { get; set; }
     public DateTime DateAdded { get; set; }
     public DateTime DateUpdated { get; set; }
+    public int FKassaId { get; set; }
 }
 
 // Model to use when returning from controller
@@ -45,8 +45,10 @@ public class KassaContainerReturnDto {
     public decimal Afroomkluis { get; set; }
     public decimal InkomstBar { get; set; }
     public decimal InkomstLidkaart { get; set; }
-    public bool Concept { get; set; }
+    public string State { get; set; }
     public DateTime DateAdded { get; set; }
     public DateTime DateUpdated { get; set; }
+    public int FKassaId { get; set; }
     public List<UserDto> Tappers { get; set; }
+    public int? LatestKassaId { get; set; }
 }

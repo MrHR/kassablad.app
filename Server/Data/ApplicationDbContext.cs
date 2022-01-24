@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -76,4 +76,6 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
 
         base.OnModelCreating(builder);
     }
+
+    public DbSet<kassablad.app.Server.Models.FKassa> FKassa { get; set; }
 }

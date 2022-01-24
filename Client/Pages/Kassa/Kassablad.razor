@@ -18,6 +18,7 @@
 <p>Welkom! Tel je kasse en laat het zuipfestijn beginnen!!!</p>
 
 <div class="content-container">
+    @* TODO: Scan Kassa_Naam => Check kassa state, open kassa state where last user left off *@
     <h2>Tel je kassa</h2>
     <EditForm Model=@kcDto OnValidSubmit="@HandleValidSubmit">
         <DataAnnotationsValidator />
@@ -42,39 +43,61 @@
 </div>
 
 @code {
+    bool busy;
     private string? errorMessage;
     [Parameter]
     public int? KassaContainerId { get; set; }
-    private KassaContainerDto kcDto = new() {
+    private KassaContainerDto kcDto = new() 
+    {
         Activiteit = "Café"
     };
-    List<string> activiteiten = new List<string>() {
-            "Café",
-            "Foif",
-            "Fiest",
-            "Opkuis",
-            "Ander"
-        };
-    bool busy;
-    async Task OnBusyClick()
+    List<string> activiteiten = new List<string>() 
     {
-        busy = true;
-        await Task.Delay(2000);
-        busy = false;
+        "Café",
+        "Foif",
+        "Fiest",
+        "Opkuis",
+        "Ander"
+    };
+    protected override async Task OnInitializedAsync()
+    {
+        if(KassaContainerId != null)
+        {
+            using var response = await Http.GetAsync($"api/KassaContainer/{KassaContainerId}");
+
+            if(!response.IsSuccessStatusCode)
+            {
+                errorMessage = response.ReasonPhrase;
+                Console.WriteLine($"There was an error! {errorMessage}");
+                KassaContainerId = null;
+            }
+            else
+            {
+                var content = await response.Content.ReadFromJsonAsync<KassaContainerDto>();
+                content.Activiteit = kcDto.Activiteit;
+                kcDto = content;
+                Console.WriteLine($"Got the kassaContainer: { kcDto.KassaContainerId }");
+            }
+        }
     }
     private async Task HandleValidSubmit()
     {
-        using var response = await Http.PostAsJsonAsync("api/KassaContainer", kcDto);
+        busy = true;
+        kcDto.BeginUur = DateTime.Now;
+        kcDto.State = "B";
+        using var response = await Http.PutAsJsonAsync($"api/KassaContainer/{kcDto.KassaContainerId}", kcDto);
 
         if(!response.IsSuccessStatusCode)
         {
             errorMessage = response.ReasonPhrase;
             Console.WriteLine($"There was an error! {errorMessage}");
+            busy = false;
             return;
         }
         else
         {
             Console.WriteLine($"Success! Rerouting");
+            busy = false;
             NavigationManager.NavigateTo("/kassa", false);
         }
 

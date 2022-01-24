@@ -6,6 +6,7 @@
     display:flex;
     gap:20px;
     flex-wrap: wrap;
+    position: relative !important;
 }
 .coinCounter .card {
     width:200px;
@@ -59,4 +60,9 @@
     border:3.25mm solid #C0C0C0;
     outline:2px solid #b8b8b8;
     color:#2b2400;
+}
+.btnKassaCounted {
+    position:absolute;
+    bottom:20px;
+    display:block;
 }
