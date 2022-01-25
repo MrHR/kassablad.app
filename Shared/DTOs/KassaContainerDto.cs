@@ -51,4 +51,5 @@ public class KassaContainerReturnDto {
     public int FKassaId { get; set; }
     public List<UserDto> Tappers { get; set; }
     public int? LatestKassaId { get; set; }
+    public KassaDto KassaDto { get; set; }
 }

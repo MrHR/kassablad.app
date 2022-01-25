@@ -47,7 +47,7 @@
     private string? errorMessage;
     [Parameter]
     public int? KassaContainerId { get; set; }
-    private KassaContainerDto kcDto = new() 
+    private KassaContainerReturnDto kcDto = new() 
     {
         Activiteit = "Café"
     };
@@ -68,16 +68,20 @@
             if(!response.IsSuccessStatusCode)
             {
                 errorMessage = response.ReasonPhrase;
-                Console.WriteLine($"There was an error! {errorMessage}");
+                Console.WriteLine($"There was an error getting the kassacontainer! {errorMessage}");
                 KassaContainerId = null;
             }
             else
             {
-                var content = await response.Content.ReadFromJsonAsync<KassaContainerDto>();
-                content.Activiteit = kcDto.Activiteit;
+                var content = await response.Content.ReadFromJsonAsync<KassaContainerReturnDto>() 
+                    ?? new KassaContainerReturnDto();
+                content.Activiteit = content.Activiteit == null ? kcDto.Activiteit : content.Activiteit;
                 kcDto = content;
-                Console.WriteLine($"Got the kassaContainer: { kcDto.KassaContainerId }");
             }
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/kassascan", false);
         }
     }
     private async Task HandleValidSubmit()
@@ -90,17 +94,16 @@
         if(!response.IsSuccessStatusCode)
         {
             errorMessage = response.ReasonPhrase;
-            Console.WriteLine($"There was an error! {errorMessage}");
+            Console.WriteLine($"There was an error updating the kassacontainer! {errorMessage}");
             busy = false;
             return;
         }
         else
         {
-            Console.WriteLine($"Success! Rerouting");
             busy = false;
-            NavigationManager.NavigateTo("/kassa", false);
+            NavigationManager.NavigateTo($"/kassa/{kcDto.KassaContainerId}", false);
         }
 
-        var content = await response.Content.ReadFromJsonAsync<KassaContainerDto>();
+        // var content = await response.Content.ReadFromJsonAsync<KassaContainerReturnDto>();
     }
 }

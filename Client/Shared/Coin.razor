@@ -16,6 +16,8 @@
 
 @code {
     [Parameter]
+    public int NominationId { get; set; } = 0;
+    [Parameter]
     public string? ClassName { get; set; }
     [Parameter]
     public string? Text { get; set; }
@@ -25,6 +27,8 @@
     public string? Valuta { get; set; }
     [Parameter]
     public int CoinCount { get; set; }
+    [CascadingParameter]
+    protected bool? update { get; set; }
     private decimal Total() {
         return Value * CoinCount;
     }
@@ -47,33 +51,15 @@
     
         Console.WriteLine($"Dialog result: {result}");
     }
-
-    @* 
-    THIS IS CODE FOR HANDLING CLICK EVENTS FROM COMPONENT
-
-    [Parameter]
-    public EventCallback<MouseEventArgs> Click { get; set; }
-    bool clicking;
-    /// <summary>
-    /// Handles the <see cref="E:Click" /> event.
-    /// </summary>
-    /// <param name="args">The <see cref="MouseEventArgs"/> instance containing the event data.</param>
-    public async Task OnClick(MouseEventArgs args)
+    protected override async Task OnParametersSetAsync()
     {
-        if (clicking)
+        await SaveNomAsync();
+    }
+    private async Task SaveNomAsync()
+    {
+        if(update is not null)
         {
-            return;
+            //TODO: update the kassanomination 
         }
-
-        try
-        {
-            clicking = true;
-
-            await Click.InvokeAsync(args);
-        }
-        finally
-        {
-            clicking = false;
-        }
-    } *@
+    }
 }

@@ -38,16 +38,31 @@ namespace kassablad.app.Server.Controllers
 
         // GET: api/KassaContainer/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<KassaContainerDto>> GetKassaContainer(int id)
+        public async Task<ActionResult<KassaContainerReturnDto>> GetKassaContainer(int id)
         {
-            var kassaContainer = await _context.KassaContainers.FindAsync(id);
+            //FindAsync vs SingleOrDefaultAsync: https://stackoverflow.com/questions/21817569/use-of-include-with-async-await
+            var kassaContainer = await _context.KassaContainers
+                .Include(k => k.Kassas)
+                .ThenInclude(kn => kn.KassaNominations)
+                .SingleOrDefaultAsync(x => x.KassaContainerId == id);
 
             if (kassaContainer == null)
             {
                 return NotFound();
             }
 
-            var kassaContainerDto = new KassaContainerDto()
+            var kassa = kassaContainer.Kassas.LastOrDefault();
+            var kassaNoms = kassa?.KassaNominations?.ToList();
+            var kassaNominationDtos = new List<KassaNominationDto>();
+            kassaNoms?.ForEach(kn => {
+                kassaNominationDtos.Add(new KassaNominationDto {
+                    KassaNominationId = kn.KassaNominationId,
+                    Amount = kn.Amount,
+                    Total = kn.Total,
+                    NominationId = kn.NominationId,
+                });
+            });
+            var kassaContainerReturnDto = new KassaContainerReturnDto()
             {
                 Activiteit = kassaContainer.Activiteit,
                 Afroomkluis = kassaContainer.Afroomkluis,
@@ -61,10 +76,16 @@ namespace kassablad.app.Server.Controllers
                 InkomstLidkaart = kassaContainer.InkomstLidkaart,
                 KassaContainerId = kassaContainer.KassaContainerId,
                 Notes = kassaContainer.Notes,
-                State = kassaContainer.State.ToString()
+                State = kassaContainer.State.ToString(),
+                KassaDto = new KassaDto() 
+                {
+                    KassaId = kassa == null ? 0 : kassa.KassaId,
+                    Type = kassa?.Type,
+                    KassaNominations = kassaNominationDtos
+                }
             };
 
-            return kassaContainerDto;
+            return kassaContainerReturnDto;
         }
 
         // PUT: api/KassaContainer/5

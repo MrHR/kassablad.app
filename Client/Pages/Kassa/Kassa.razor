@@ -1,3 +1,4 @@
+@page "/kassa/{KassaContainerId:int?}"
 @page "/kassa"
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
@@ -7,8 +8,10 @@
 @inject HttpClient Http
 @using System.Net.Http.Json @*https://docs.microsoft.com/en-us/aspnet/core/blazor/call-web-api?view=aspnetcore-6.0&pivots=webassembly *@
 @using Microsoft.Extensions.Logging
+@using System.Text.Json
 @inject ILogger<KassaContainerDto> Logger
 @inject DialogService DialogService
+@inject NavigationManager NavigationManager
 
 <PageTitle>Kassa</PageTitle>
 
@@ -23,58 +26,134 @@
 
 <div class="content-container">
     <div class="coinCounter">
-        <Coin 
-            ClassName="coin-5cent coinWrapperBox"
-            Text="5"
-            Value="@((decimal)0.05)"
-            Valuta="cent"
-            CoinCount="10"
-        />
-        <Coin 
-            ClassName="coin-10cent coinWrapperBox"
-            Text="10" 
-            Value="@((decimal)0.10)"
-            Valuta="cent"
-            CoinCount="53"
-        />
-        <Coin 
-            ClassName="coin-20cent coinWrapperBox"
-            Text="20" 
-            Value="@((decimal)0.20)"
-            Valuta="cent"
-            CoinCount="7"
-        />
-        <Coin 
-            ClassName="coin-50cent coinWrapperBox"
-            Text="50" 
-            Value="@((decimal)0.50)"
-            Valuta="cent"
-            CoinCount="10"
-        />
-        <Coin
-            ClassName="coin-1euro coinWrapperBox"
-            Text="1" 
-            Value="@((decimal)1.00)"
-            Valuta="euro"
-            CoinCount="12"
-        />
-        <Coin
-            ClassName="coin-2euro coinWrapperBox"
-            Text="2" 
-            Value="@((decimal)2.00)"
-            Valuta="euro"
-            CoinCount="8"
-        />
+        <CascadingValue Value="update">
+            @foreach (var coin in nominations)
+            {
+                <Coin 
+                    ClassName=@($"coin-{coin.Text}{coin.Nom.Currency} coinWrapperBox")
+                    Text="@coin.Text"
+                    Value="@coin.Nom.Multiplier"
+                    Valuta="@coin.Nom.Currency"
+                    CoinCount="@coin.DefaultAmount"
+                    NominationId="@coin.NominationId"
+                />
+            }
+        </CascadingValue>
     </div>
     <RadzenButton Text="Kassa Geteld" class="btnKassaCounted"/>
 </div>
 
 @code {
-    @* 
-        Keep beginkassa data here
-        but sync object with databbase
-        when kassa = counted change status to counted
-     *@
+    /**
+    * Keep beginkassa data here
+    * but sync object with databbase
+    * when kassa = counted change status to counted
+    **/
 
     string kassaType = "beginKassa";
+    private bool update = false;
+    bool busy;
+    private string? errorMessage;
+    [Parameter]
+    public int? KassaContainerId { get; set; }
+    private KassaContainerReturnDto kcDto = new();
+    private List<NominationDto> nominations = new List<NominationDto>();
+    protected override async Task OnInitializedAsync()
+    {
+        //TODO: Get and Render noms
+        try
+        {
+            using var nomResponse = await Http.GetAsync("api/nomination");
+            if(!nomResponse.IsSuccessStatusCode)
+            {
+                errorMessage = nomResponse.ReasonPhrase;
+                Console.WriteLine($"There was an error with loading the nominations! {errorMessage}");
+            }
+            else
+            {
+                nominations = await nomResponse.Content.ReadFromJsonAsync<List<NominationDto>>() 
+                    ?? new List<NominationDto>();
+                // Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(nominations));
+            }
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine(JsonSerializer.Serialize(ex));
+        }
+        
+
+        //Check if kassacontainer exists
+        if(KassaContainerId != null) //IF KassaContainer
+        {
+            //GET KassaContainer
+            using var response = await Http.GetAsync($"api/KassaContainer/{KassaContainerId}");
+
+            if(!response.IsSuccessStatusCode) //On FAIL
+            {
+                errorMessage = response.ReasonPhrase;
+                Console.WriteLine($"There was an error getting the kassacontainer! {errorMessage}");
+            }
+            else //On SUCCESS
+            {
+                kcDto = await response.Content.ReadFromJsonAsync<KassaContainerReturnDto>() 
+                    ?? new KassaContainerReturnDto();
+                Console.WriteLine(SerializeMethod(kcDto)); 
+                //Check if KassaDto exits
+                if(kcDto.KassaDto.KassaId == 0) // Kassa does not exist
+                {
+                    //TODO: Create Kassa
+                    var kDto = await CreateKassaDto(kcDto);
+                    if(kDto.KassaId != 0)
+                    {   
+                        Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(kDto));
+                    }
+
+                    //TODO: If created and id is not null trigger save noms
+                }
+                else // kassa exists
+                {
+                    //TODO: Trigger Kassanom update & set kassatype
+                }
+            }
+        }
+        else //IF no KassaContainer
+        {
+            NavigationManager.NavigateTo("/kassascan", false);
+        }
+    }
+    private async Task<KassaDto> CreateKassaDto(KassaContainerReturnDto kcReturnDto)
+    {
+        var content = new KassaDto();
+        KassaDto kDto = new() 
+        {
+            KassaContainerId = kcReturnDto.KassaContainerId,
+            Type = "beginKassa" //beginkasssa because no kassa so obviously -.-
+        };
+
+        using var response = await Http.PostAsJsonAsync("api/Kassa", kDto);
+        if(!response.IsSuccessStatusCode)
+        {
+            errorMessage = response.ReasonPhrase;
+            Console.WriteLine($"There was an error with creating the kassa! {errorMessage}");
+
+            return new KassaDto();
+        }
+        else
+        {
+            Console.WriteLine($"Success!");
+            content = await response.Content.ReadFromJsonAsync<KassaDto>() ?? new KassaDto();
+        }
+
+        return content;
+    }
+
+    string SerializeMethod(KassaContainerReturnDto kcObject)
+    {
+        //serialization
+        string serializedString = System.Text.Json.JsonSerializer.Serialize(kcObject);
+        
+        return serializedString;
+    }
+
+
 }

@@ -1,11 +1,7 @@
 using System.ComponentModel.DataAnnotations;
+using kassablad.app.Shared;
 
 namespace kassablad.app.Server.Models;
-public enum Statuses {
-    Open,
-    Counted,
-    Closed
-}
 public class Kassa {
     public int KassaId { get; set; }
     [Required]
@@ -15,7 +11,7 @@ public class Kassa {
     [Required]
     public DateTime DateUpdated { get; set; }
     [Required]
-    public int UpdatedBy { get; set; }
+    public string? UpdatedBy { get; set; }
     [Required]
     public string? CreatedBy { get; set; }
     [Required]

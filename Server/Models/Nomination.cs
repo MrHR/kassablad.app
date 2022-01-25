@@ -15,7 +15,7 @@ public class Nomination {
     public string? CreatedBy { get; set; }
     [Required]
     public int DefaultAmount { get; set; }
-    public string Total { get; set; } = String.Empty;
+    public string Text { get; set; } = String.Empty;
     public virtual ICollection<KassaNomination>? KassaNominations { get; set; }
     [Required]
     public Nom? Nom { get; set; } // The Ownership of this keyless value object is defined in dbContext with fluent API
