@@ -32,15 +32,21 @@
                 <Coin 
                     ClassName=@($"coin-{coin.Text}{coin.Nom.Currency} coinWrapperBox")
                     Text="@coin.Text"
-                    Value="@coin.Nom.Multiplier"
                     Valuta="@coin.Nom.Currency"
-                    CoinCount="@coin.DefaultAmount"
-                    NominationId="@coin.NominationId"
+                    KassaNom="@(new KassaNominationDto 
+                    { 
+                        Amount = coin.DefaultAmount,
+                        NominationId = coin.NominationId, 
+                        Total = coin.Nom.Multiplier,
+                        KassaId = kassa.KassaId
+                    })"
                 />
             }
         </CascadingValue>
     </div>
-    <RadzenButton Text="Kassa Geteld" class="btnKassaCounted"/>
+    <!--TODO: Add up all coin totals and display here-->
+    <span class="total">= € 350.00</span> 
+    <RadzenButton Text="Kassa Geteld" class="btnKassaCounted" Click=@OnSubmit/>
 </div>
 
 @code {
@@ -50,17 +56,18 @@
     * when kassa = counted change status to counted
     **/
 
-    string kassaType = "beginKassa";
+    string? kassaType = "beginKassa";
     private bool update = false;
     bool busy;
     private string? errorMessage;
     [Parameter]
     public int? KassaContainerId { get; set; }
-    private KassaContainerReturnDto kcDto = new();
+    private KassaContainerReturnDto kcDto { get; set; } = new();
+    private KassaDto? kassa { get; set; }
     private List<NominationDto> nominations = new List<NominationDto>();
     protected override async Task OnInitializedAsync()
     {
-        //TODO: Get and Render noms
+        //Get and Render noms
         try
         {
             using var nomResponse = await Http.GetAsync("api/nomination");
@@ -71,23 +78,21 @@
             }
             else
             {
+                Console.WriteLine("Success getting Nominations!");
                 nominations = await nomResponse.Content.ReadFromJsonAsync<List<NominationDto>>() 
                     ?? new List<NominationDto>();
-                // Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(nominations));
             }
         }
         catch(Exception ex)
         {
             Console.WriteLine(JsonSerializer.Serialize(ex));
         }
-        
 
         //Check if kassacontainer exists
         if(KassaContainerId != null) //IF KassaContainer
         {
             //GET KassaContainer
             using var response = await Http.GetAsync($"api/KassaContainer/{KassaContainerId}");
-
             if(!response.IsSuccessStatusCode) //On FAIL
             {
                 errorMessage = response.ReasonPhrase;
@@ -96,24 +101,87 @@
             else //On SUCCESS
             {
                 kcDto = await response.Content.ReadFromJsonAsync<KassaContainerReturnDto>() 
-                    ?? new KassaContainerReturnDto();
-                Console.WriteLine(SerializeMethod(kcDto)); 
+                    ?? new KassaContainerReturnDto(); //map KassaContainer to object
+                Console.WriteLine($"kassContainerDto: {SerializeMethod(kcDto)}");
+                kassa = kcDto.lstKassaDtos.LastOrDefault() ?? null;
+
+                //create kassa if none exists
+                /*if(kassa == null || kassa?.KassaId == 0)
+                {
+                    //Create kassa
+                    var kDto = await CreateKassaDto(kcDto);
+                    if(kDto.KassaId != 0)
+                    {   
+                        Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(kDto));
+                        kassa = kDto;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"There was an error creating the Kassa!");
+                    }
+                }
+                kassaType = kassa.Type;
+                //Check if kassatype matches kassacontainer state
+                //first case kc state == kassa state
+                if(kcDto.State?.ToUpper() == kassa.Type?.ToUpper() && kassa.Type == "beginKassa")
+                {
+                    //show kassa
+                }
+                else if(kcDto.State?.ToUpper() != kassa.Type?.ToUpper() && kcDto.State == "EindKassa")
+                {
+                    //Create eindkassa
+                }
+                else if(kcDto.State?.ToUpper() == kassa.Type?.ToUpper() && kassa.Type == "eindKassa")
+                {
+                    //Show kassa
+                }
+                else if(kcDto.State?.ToUpper() != kassa.Type?.ToUpper() && kcDto.State == "Eindkassa")
+                {
+                    //show Kassa
+                }*/
+
+                // check to create beginkassa, eindkassa or just show the existing kassa
+                if(kassa == null || kassa?.KassaId == 0) // create begin
+                {
+                    //TODO: Craete beginKassa
+                    var kDto = await CreateKassaDto(kcDto, "beginKassa");
+                    Console.WriteLine($"Created BeginKassa: {System.Text.Json.JsonSerializer.Serialize(kDto)}");
+                    kassa = kDto;
+                }
+                else if(kcDto.State?.ToUpper() != kassa.Type?.ToUpper() && kcDto.State == "EindKassa") // create eind
+                {
+                    //TODO: Create EindKassa
+                    var kDto = await CreateKassaDto(kcDto, "eindKassa");
+                    Console.WriteLine($"Created EindKassa: {System.Text.Json.JsonSerializer.Serialize(kDto)}");
+                    kassa = kDto;
+                }
+
+                kassaType = kassa?.Type;
+                Console.WriteLine($"KassaType: {kassa.Type}");
+                Console.WriteLine($"KassaContainer State: {kcDto.State}");
+
                 //Check if KassaDto exits
-                if(kcDto.KassaDto.KassaId == 0) // Kassa does not exist
+                /*if(kcDto.lstKassaDtos.Last()?.KassaId == 0) // Kassa does not exist
                 {
                     //TODO: Create Kassa
                     var kDto = await CreateKassaDto(kcDto);
                     if(kDto.KassaId != 0)
                     {   
                         Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(kDto));
+                        kassa = kDto;
                     }
-
-                    //TODO: If created and id is not null trigger save noms
+                    else
+                    {
+                        Console.WriteLine($"There was an error creating the Kassa!");
+                    }
                 }
                 else // kassa exists
                 {
-                    //TODO: Trigger Kassanom update & set kassatype
-                }
+                    //if kassaContainer state matches kassatype
+                    kassa = kcDto.KassaDto;
+                    kassaType = kassa?.Type;
+                    Console.WriteLine($"KassaType: {kassa.Type}");
+                }*/
             }
         }
         else //IF no KassaContainer
@@ -121,15 +189,16 @@
             NavigationManager.NavigateTo("/kassascan", false);
         }
     }
-    private async Task<KassaDto> CreateKassaDto(KassaContainerReturnDto kcReturnDto)
+    private async Task<KassaDto> CreateKassaDto(KassaContainerReturnDto kcReturnDto, string type)
     {
         var content = new KassaDto();
         KassaDto kDto = new() 
         {
             KassaContainerId = kcReturnDto.KassaContainerId,
-            Type = "beginKassa" //beginkasssa because no kassa so obviously -.-
+            Type = type
         };
 
+        //Post the Kassa
         using var response = await Http.PostAsJsonAsync("api/Kassa", kDto);
         if(!response.IsSuccessStatusCode)
         {
@@ -146,14 +215,45 @@
 
         return content;
     }
+    private async void OnSubmit()
+    {
+        //TODO: set kassaContainer state: if beginkassa set to eindkassa else set to info
+        var state = "";
+        if(kcDto.State == "BeginKassa") {
+            state = "EindKassa";
+        } else {
+            state = "Info";
+        }
 
+        using var response = await Http
+            .PutAsJsonAsync(
+                $"api/kassaContainer/updateState?id={kcDto.KassaContainerId}&state={state}",
+                kcDto);
+        if(!response.IsSuccessStatusCode)
+        {
+            errorMessage = response.ReasonPhrase;
+            Console.WriteLine($"There was an error with updating the kassacontainer state! {errorMessage}");
+        }
+        else
+        {
+            Console.WriteLine($"state: {state}");
+            switch(state)
+            {
+                case "Info":
+                    Console.WriteLine($"Rerouting to kassaInfo: {KassaContainerId}");
+                    NavigationManager.NavigateTo($"/kassainfo/{KassaContainerId}", false);
+                    break;
+                case "EindKassa":
+                    Console.WriteLine($"Routing to Eindkassa: {KassaContainerId}");
+                    NavigationManager.NavigateTo($"/kassa/{KassaContainerId}", true);
+                    break;
+            }
+        }
+    }
     string SerializeMethod(KassaContainerReturnDto kcObject)
     {
         //serialization
         string serializedString = System.Text.Json.JsonSerializer.Serialize(kcObject);
-        
         return serializedString;
     }
-
-
 }
