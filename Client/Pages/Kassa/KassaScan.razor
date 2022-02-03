@@ -79,19 +79,21 @@
             if(kassaContainerDto != null)
             {
                 busy = false;
+                Console.WriteLine($"KassaState: {kassaContainerDto.State}");
                 switch(kassaContainerDto?.State)
                 {
-                    case "A":
+                    case "Activiteit":
                         Console.WriteLine($"Rerouting to kassablad with id: {kassaContainerDto.KassaContainerId}");
                         NavigationManager.NavigateTo($"/kassablad/{kassaContainerDto.KassaContainerId}", false);         
                         break;
-                    case "B":
+                    case "EindKassa":
+                    case "BeginKassa":
                         Console.WriteLine($"Rerouting to kassa with container id: {kassaContainerDto.KassaContainerId}");
                         NavigationManager.NavigateTo($"/kassa/{kassaContainerDto.KassaContainerId}", false);
                         break;
-                    case "C":
-                        Console.WriteLine($"Rerouting to kassafinal with container id: {kassaContainerDto.KassaContainerId}");
-                        NavigationManager.NavigateTo($"/kassafinal/{kassaContainerDto.KassaContainerId}", false);
+                    case "Info":
+                        Console.WriteLine($"Rerouting to kassainfo with container id: {kassaContainerDto.KassaContainerId}");
+                        NavigationManager.NavigateTo($"/kassainfo/{kassaContainerDto.KassaContainerId}", false);
                         break;
                 }
             }
@@ -123,7 +125,7 @@
         var content = new KassaContainerReturnDto();
         KassaContainerDto KassaContainerDto = new() {
             FKassaId = fKassa.FKassaId,
-            State = "A"
+            State = "Activiteit"
         };
         using var response = await Http.PostAsJsonAsync("api/KassaContainer", KassaContainerDto);
 
@@ -135,7 +137,8 @@
         else 
         {
             Console.WriteLine($"Success!");
-            content = await response.Content.ReadFromJsonAsync<KassaContainerReturnDto>();
+            content = await response.Content.ReadFromJsonAsync<KassaContainerReturnDto>() 
+                ?? new KassaContainerReturnDto();
         }
 
         return content;

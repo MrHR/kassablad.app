@@ -17,7 +17,7 @@ public class Kassa {
     [Required]
     public int KassaContainerId { get; set; }
     [Required]
-    public string? Type { get; set; }
+    public string? Type { get; set; } //beginKassa || eindkassa(maybe make enum)
     [Required]
     public Statuses Status { get; set; }
     public virtual KassaContainer? KassaContainer { get; set; }

@@ -19,5 +19,5 @@ public class FKassaDto {
     [Required]
     public string? FKassaNaam { get; set; }
 
-    public KassaContainerReturnDto KassaContainerDto { get; set; }
+    public KassaContainerReturnDto KassaContainerDto { get; set; } = new KassaContainerReturnDto();
 }

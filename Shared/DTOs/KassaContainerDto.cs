@@ -45,11 +45,12 @@ public class KassaContainerReturnDto {
     public decimal Afroomkluis { get; set; }
     public decimal InkomstBar { get; set; }
     public decimal InkomstLidkaart { get; set; }
-    public string State { get; set; }
+    public string? State { get; set; }
     public DateTime DateAdded { get; set; }
     public DateTime DateUpdated { get; set; }
     public int FKassaId { get; set; }
-    public List<UserDto> Tappers { get; set; }
+    public List<UserDto>? Tappers { get; set; }
     public int? LatestKassaId { get; set; }
-    public KassaDto KassaDto { get; set; }
+    public KassaDto? KassaDto { get; set; }
+    public List<KassaDto> lstKassaDtos { get; set; }
 }

@@ -20,12 +20,12 @@ public class StateContainer
 }
 
 public class KassaContainer {
-    public List<Kassa> Kassas { get; set; }
+    public List<Kassa> Kassas { get; set; } = new List<Kassa>();
 }
 
 public class Kassa { 
-    public string Type { get; set; }
-    public List<KassaNom> KassaNoms { get; set; }
+    public string? Type { get; set; }
+    public List<KassaNom> KassaNoms { get; set; } = new List<KassaNom>();
 }
 
 public class KassaNom { 

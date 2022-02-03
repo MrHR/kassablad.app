@@ -127,10 +127,11 @@ namespace kassablad.app.Server
 
             //TODO Maybe: Map Kassa to return kassa
             var KassaReturnDto = new KassaDto {
+                KassaId = Kassa.KassaId,
                 KassaContainerId = Kassa.KassaContainerId,
                 Type = Kassa.Type,
                 Status = Kassa.Status,
-                KassaNominations = new List<KassaNominationDto>(),
+                KassaNominations = new List<KassaNominationDto>()
             };
 
             return CreatedAtAction("GetKassa", new { id = Kassa.KassaId }, KassaReturnDto);

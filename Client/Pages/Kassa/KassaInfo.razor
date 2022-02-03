@@ -1,0 +1,50 @@
+@page "/kassainfo"
+@page "/kassainfo/{KassaContainerId:int?}"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using kassablad.app.Shared
+@attribute [Authorize]
+@using System.Net.Http
+@inject HttpClient Http
+@using System.Net.Http.Json @*https://docs.microsoft.com/en-us/aspnet/core/blazor/call-web-api?view=aspnetcore-6.0&pivots=webassembly *@
+@using Microsoft.Extensions.Logging
+@inject NavigationManager NavigationManager
+@inject ILogger<KassaContainerDto> Logger
+
+<PageTitle>Kassa Afsluiten</PageTitle>
+
+<h1>Kassa Afsluiten</h1>
+
+<p>Welkom! Tel je kasse en laat het zuipfestijn beginnen!!!</p>
+
+<div class="content-container">
+    <h2>Tel je kassa</h2>
+    @* <EditForm Model=@kcDto OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        Testing
+        <RadzenButton
+            IsBusy=@busy 
+            Text="Start" 
+            type="submit" 
+        />
+    </EditForm> *@
+</div>
+
+@code {
+    bool busy;
+    [Parameter]
+    public int? KassaContainerId { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        if(KassaContainerId == 0)
+        {
+            NavigationManager.NavigateTo("/kassascan", false);
+        }
+    }
+    private async Task HandleValidSubmit()
+    {
+        busy = true;
+        //TODO: hadle submit....
+    }
+}

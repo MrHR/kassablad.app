@@ -14,7 +14,9 @@ namespace kassablad.app.Shared;
 // Model to use when posting/putting to controller
 public class KassaNominationDto {
     public int KassaNominationId { get; set; }
+    public int KassaId { get; set; }
     public int Amount { get; set; }
+    public decimal Multiplier { get; set; }
     public decimal Total { get; set; }
     public int NominationId { get; set; }
 }

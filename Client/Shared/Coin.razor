@@ -1,4 +1,8 @@
 @inject DialogService DialogService
+@using kassablad.app.Shared
+@using System.Net.Http
+@inject HttpClient Http
+@using System.Net.Http.Json @*https://docs.microsoft.com/en-us/aspnet/core/blazor/call-web-api?view=aspnetcore-6.0&pivots=webassembly *@
 
 <RadzenCard class="@ClassName" @onclick="@openDialog">
     <div class="coinWrapper">
@@ -10,33 +14,40 @@
         </div>
     </div>
     <div class="coinCount">
-        @CoinCount
+        @KassaNom.Amount
     </div>
 </RadzenCard>
 
 @code {
-    [Parameter]
-    public int NominationId { get; set; } = 0;
+    private string? errorMessage;
     [Parameter]
     public string? ClassName { get; set; }
     [Parameter]
     public string? Text { get; set; }
     [Parameter]
-    public decimal Value { get; set; }
-    [Parameter]
     public string? Valuta { get; set; }
     [Parameter]
-    public int CoinCount { get; set; }
-    [CascadingParameter]
-    protected bool? update { get; set; }
-    private decimal Total() {
-        return Value * CoinCount;
+    public KassaNominationDto KassaNom { get; set; } = new KassaNominationDto();
+    protected override async Task OnInitializedAsync()
+    {
+        //try to get kNomination
+        var content = await getKassaNomination(KassaNom.KassaId, KassaNom.NominationId); 
+        if(content.KassaNominationId != 0)
+        {
+            KassaNom.KassaNominationId = content.KassaNominationId;
+            KassaNom.Amount = content.Amount;
+            KassaNom.Total = content.Amount * content.Multiplier;
+        }
+        else // if kassa but no kassa nomination yet
+        {
+            Console.WriteLine($"KassaNom: {System.Text.Json.JsonSerializer.Serialize(KassaNom)}");
+            KassaNom = await createKassaNomination(KassaNom);
+        }
     }
     public async Task openDialog() {
-        Console.WriteLine("test");
         var result = await DialogService.OpenAsync("Hoeveelheid", ds =>
             @<div>
-                <p class="mb-4">€ @Value x  <RadzenNumeric TValue="int" @bind-Value=@CoinCount/></p>
+                <p class="mb-4">€ @KassaNom.Multiplier x  <RadzenNumeric TValue="int" @bind-Value=@KassaNom.Amount Change=@(args => OnChange())/></p>
                 <div class="row">
                     <div class="col">
                         <RadzenButton Text="Ok" Click="() => ds.Close(true)" Class="mr-1" Style="width: 80px;" />
@@ -49,17 +60,80 @@
                 AutoFocusFirstElement = false 
             });
     
-        Console.WriteLine($"Dialog result: {result}");
+        // Console.WriteLine($"Dialog result: {result}");
     }
+    //On parameter change
     protected override async Task OnParametersSetAsync()
     {
-        await SaveNomAsync();
+        // await SaveNomAsync();
     }
-    private async Task SaveNomAsync()
+    //private async Task SaveNomAsync()
+    public async void OnChange()
     {
-        if(update is not null)
+        //TODO: create the kassanomination
+        if(KassaNom.KassaNominationId is 0)
         {
-            //TODO: update the kassanomination 
+            //TODO: post kassanom
+            KassaNom = await createKassaNomination(KassaNom);
         }
+        else // update the kassanomination
+        {
+            //TODO: Put KassaNom
+            Console.WriteLine($"Updating KassaNomination: {KassaNom.KassaNominationId}");
+            var result = await updateKassaNomination(KassaNom);
+        }
+    }
+
+    private async Task<KassaNominationDto> createKassaNomination(KassaNominationDto kassaNom)
+    {
+        var content = new KassaNominationDto();
+        using var response = await Http.PostAsJsonAsync("api/KassaNomination", kassaNom);
+        if(!response.IsSuccessStatusCode)
+        {
+            errorMessage = response.ReasonPhrase;
+            Console.WriteLine($"There was an error with creating the kassaNomination! {errorMessage}");
+        }
+        else
+        {
+            Console.WriteLine($"Success creating kass nom!");
+            content = await response.Content.ReadFromJsonAsync<KassaNominationDto>()
+                ?? new KassaNominationDto();
+        }
+
+        return content;
+    }
+    private async Task<bool> updateKassaNomination(KassaNominationDto kassaNom)
+    {
+        using var response = await Http.PutAsJsonAsync($"api/KassaNomination/{kassaNom.KassaNominationId}", kassaNom);
+        if(!response.IsSuccessStatusCode)
+        {
+            errorMessage = response.ReasonPhrase;
+            Console.WriteLine($"There was an error updating the kassaNomination! {errorMessage}");
+            return false;
+        }
+        else
+        {
+            Console.Write($"Success updating KassaNomination!");
+        }
+
+        return true;
+    }
+    private async Task<KassaNominationDto> getKassaNomination(int KassaId, int NominationId)
+    {
+        var content = new KassaNominationDto();
+        using var response = await Http.GetAsync($"api/KassaNomination/byKassaId?kassaId={KassaId}&nominationId={NominationId}");
+        if(!response.IsSuccessStatusCode)
+        {
+            errorMessage = response.ReasonPhrase;
+            Console.WriteLine($"No KassaNomination Exists! {errorMessage}");
+        }
+        else
+        {
+            Console.WriteLine("Success Getting KassaNomination!");
+            content = await response.Content.ReadFromJsonAsync<KassaNominationDto>()
+                ?? new KassaNominationDto();
+        }
+
+        return content;
     }
 }

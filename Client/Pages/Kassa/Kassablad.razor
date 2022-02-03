@@ -88,7 +88,7 @@
     {
         busy = true;
         kcDto.BeginUur = DateTime.Now;
-        kcDto.State = "B";
+        kcDto.State = "BeginKassa";
         using var response = await Http.PutAsJsonAsync($"api/KassaContainer/{kcDto.KassaContainerId}", kcDto);
 
         if(!response.IsSuccessStatusCode)

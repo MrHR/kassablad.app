@@ -2,3 +2,9 @@
     border-radius: 7px !important;
     position: relative;
 }
+.total {
+    color:white;
+    font-size: 48px;
+    font-weight: bolder;
+    line-height:100px;
+}

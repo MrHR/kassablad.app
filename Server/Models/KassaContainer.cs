@@ -3,9 +3,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace kassablad.app.Server.Models;
 public enum States {
-    A,
-    B,
-    C
+    Activiteit,
+    BeginKassa,
+    EindKassa,
+    Info,
+    Consumpties
 }
 public class KassaContainer 
 {

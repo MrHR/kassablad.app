@@ -82,8 +82,17 @@ namespace kassablad.app.Server.Controllers
                     KassaId = kassa == null ? 0 : kassa.KassaId,
                     Type = kassa?.Type,
                     KassaNominations = kassaNominationDtos
-                }
+                },
+                lstKassaDtos = new List<KassaDto>()
             };
+            kassaContainer.Kassas.ToList().ForEach(k => {
+                kassaContainerReturnDto.lstKassaDtos.Add(new KassaDto {
+                    KassaId = k.KassaId,
+                    Status = k.Status,
+                    Type = k.Type
+                });
+            });
+            
 
             return kassaContainerReturnDto;
         }
@@ -131,6 +140,39 @@ namespace kassablad.app.Server.Controllers
             {
                 _context.Entry(kassaContainer).Property(name).IsModified = false;
             }
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!KassaContainerExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        //PUT: api/kassaContainer/updateState
+        [HttpPut("updateState")]
+        public async Task<IActionResult> PutKassaContainer(int id, string state, KassaContainerReturnDto kassaContainerDto)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var kassaContainer = await _context.KassaContainers
+                .Where(kc => 
+                    kc.KassaContainerId == id
+                    && kc.Active == true)
+                .FirstOrDefaultAsync();
+            kassaContainer.UpdatedBy = user.Id;
+            kassaContainer.DateUpdated = DateTime.Now;
+            kassaContainer.State = (States) Enum.Parse(typeof(States), state, true);
 
             try
             {
