@@ -15,36 +15,101 @@
 
 <h1>Kassa Afsluiten</h1>
 
-<p>Welkom! Tel je kasse en laat het zuipfestijn beginnen!!!</p>
+<p>Vul even snel nog wat details in.</p>
 
 <div class="content-container">
-    <h2>Tel je kassa</h2>
-    @* <EditForm Model=@kcDto OnValidSubmit="@HandleValidSubmit">
+    <h2>De Laatste Beetjes</h2>
+    <EditForm Model=@kcDto OnValidSubmit="@HandleValidSubmit">
         <DataAnnotationsValidator />
         <ValidationSummary />
-        Testing
+        <RadzenLabel Text="Sluitingsuur" Component="EindUur" style="color:white;line-height:40px" /><br>
+        <RadzenDatePicker id="EindUur" TimeOnly="true" HourFormat="24" DateFormat="dd/MM/yyyy h:mm" @bind-Value="kcDto.EindUur" /><br>
+        <RadzenLabel Text="Bezoekers" Component="Bezoekers" style="color:white;line-height:40px" /><br>
+        <RadzenNumeric id="Bezoekers" TItem="int?" Placeholder="Aantal bezoekers" @bind-Value="kcDto.Bezoekers" /><br>
+        <RadzenLabel Text="Inkomst Bar" Component="InkomstBar" style="color:white;line-height:40px" /><br>
+        <RadzenNumeric id="InkomstBar" class="rz-currency" TItem="decimal" Placeholder="0.00" @bind-Value="kcDto.InkomstBar" /><br>
+        <RadzenLabel Text="Inkomst Lidkaart" Component="InkomstLidkaart" style="color:white;line-height:40px" /><br>
+        <RadzenNumeric id="InkomstLidkaart" class="rz-currency" TItem="decimal" Placeholder="0.00" @bind-Value="kcDto.InkomstLidkaart" /><br>
+        <br>
         <RadzenButton
             IsBusy=@busy 
-            Text="Start" 
+            Text="Sluit Af" 
             type="submit" 
         />
-    </EditForm> *@
+    </EditForm>
 </div>
 
 @code {
     bool busy;
+    private string? errorMessage;
     [Parameter]
     public int? KassaContainerId { get; set; }
+    private KassaContainerReturnDto kcDto { get; set; } = new() {
+        EindUur = DateTime.Now,
+        Afroomkluis = 0,
+        InkomstBar = 0,
+        Bezoekers = 0
+    };
     protected override async Task OnInitializedAsync()
     {
-        if(KassaContainerId == 0)
+        if(KassaContainerId != 0)
+        {
+            using var response = await Http.GetAsync($"api/KassaContainer/{KassaContainerId}");
+            if(!response.IsSuccessStatusCode)
+            {
+                errorMessage = response.ReasonPhrase;
+                Console.WriteLine($"There was an error getting the kassacontainer! {errorMessage}");
+                KassaContainerId = null;
+            }
+            else
+            {
+                var content = await response.Content.ReadFromJsonAsync<KassaContainerReturnDto>() 
+                    ?? new KassaContainerReturnDto();
+                Console.WriteLine($"Successfully got KassaContainer: {content.KassaContainerId}");
+                content.EindUur = content.EindUur == DateTime.MinValue ? kcDto.EindUur : content.EindUur;
+                kcDto = content;
+            }
+        }
+        else
         {
             NavigationManager.NavigateTo("/kassascan", false);
+        }
+    }
+    private async void UpdateKassaContainer()
+    {
+        busy = true;
+        //TODO: Update KassaContainer On Change Values
+        using var response = await Http.PutAsJsonAsync($"api/KassaContainer/{kcDto.KassaContainerId}", kcDto);
+        if(!response.IsSuccessStatusCode)
+        {
+            errorMessage = response.ReasonPhrase;
+            Console.WriteLine($"There was an error updating the kassacontainer! {errorMessage}");
+            busy = false;
+            @* return; *@
+        }
+        else
+        {
+            Console.WriteLine($"Successfully updated KassaContainer");
+            busy = false;
+            NavigationManager.NavigateTo($"/kassa/{kcDto.KassaContainerId}", false);
         }
     }
     private async Task HandleValidSubmit()
     {
         busy = true;
-        //TODO: hadle submit....
+        using var response = await Http.PutAsJsonAsync($"api/KassaContainer/{kcDto.KassaContainerId}", kcDto);
+        if(!response.IsSuccessStatusCode)
+        {
+            errorMessage = response.ReasonPhrase;
+            Console.WriteLine($"There was an error updating the kassacontainer! {errorMessage}");
+            busy = false;
+            return;
+        }
+        else
+        {
+            Console.WriteLine($"Successfully updated KassaContainer");
+            busy = false;
+            NavigationManager.NavigateTo($"/kassa/{kcDto.KassaContainerId}", false);
+        }
     }
 }

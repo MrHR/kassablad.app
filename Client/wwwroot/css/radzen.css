@@ -5,3 +5,14 @@
 #app .rz-dialog-content div p {
     color:black !important;
 }
+#app .rz-currency {
+    padding-left:15px;
+    position:relative;
+}
+#app .rz-currency::before {
+    content:'€';
+    position:absolute;
+    left:5px;
+    top:2px;
+    color:#686768;
+}

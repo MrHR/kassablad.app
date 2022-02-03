@@ -62,11 +62,6 @@
     
         // Console.WriteLine($"Dialog result: {result}");
     }
-    //On parameter change
-    protected override async Task OnParametersSetAsync()
-    {
-        // await SaveNomAsync();
-    }
     //private async Task SaveNomAsync()
     public async void OnChange()
     {
@@ -83,7 +78,6 @@
             var result = await updateKassaNomination(KassaNom);
         }
     }
-
     private async Task<KassaNominationDto> createKassaNomination(KassaNominationDto kassaNom)
     {
         var content = new KassaNominationDto();
