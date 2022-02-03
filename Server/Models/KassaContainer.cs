@@ -7,7 +7,8 @@ public enum States {
     BeginKassa,
     EindKassa,
     Info,
-    Consumpties
+    Consumpties,
+    Counted
 }
 public class KassaContainer 
 {

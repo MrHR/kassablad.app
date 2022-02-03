@@ -71,12 +71,11 @@
         else
         {
             var content = await response.Content.ReadFromJsonAsync<FKassaDto>();
-            var kassaContainerDto = content?.KassaContainerDto;
-
-            Console.WriteLine($"content: {content?.KassaContainerDto}");
+            var kassaContainerDto = content?.KassaContainerDto; 
+            Console.WriteLine($"FKassa: {System.Text.Json.JsonSerializer.Serialize(content)}");
 
             // If kassaContainer check state and goto right page
-            if(kassaContainerDto != null)
+            if(kassaContainerDto != null && kassaContainerDto.State != "Counted")
             {
                 busy = false;
                 Console.WriteLine($"KassaState: {kassaContainerDto.State}");

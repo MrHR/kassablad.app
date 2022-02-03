@@ -97,6 +97,7 @@
     private async Task HandleValidSubmit()
     {
         busy = true;
+        kcDto.State = "Counted";
         using var response = await Http.PutAsJsonAsync($"api/KassaContainer/{kcDto.KassaContainerId}", kcDto);
         if(!response.IsSuccessStatusCode)
         {
@@ -109,7 +110,7 @@
         {
             Console.WriteLine($"Successfully updated KassaContainer");
             busy = false;
-            NavigationManager.NavigateTo($"/kassa/{kcDto.KassaContainerId}", false);
+            NavigationManager.NavigateTo($"/kassascan", false);
         }
     }
 }
