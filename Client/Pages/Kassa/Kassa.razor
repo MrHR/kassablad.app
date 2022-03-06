@@ -42,26 +42,7 @@
                 })"
             />
         }
-
-        @* <Coin 
-            ClassName=@($"coin-{nominations.First().Text}{nominations.First().Nom.Currency} coinWrapperBox")
-            Text="@nominations.First().Text"
-            Valuta="@nominations.First().Nom.Currency"
-            KassaNom="@(new KassaNominationDto 
-            { 
-                Amount = nominations.First().DefaultAmount,
-                NominationId = nominations.First().NominationId, 
-                Multiplier = nominations.First().Nom.Multiplier,
-                KassaId = kassa.KassaId,
-                Total = nominations.First().Nom.Multiplier * nominations.First().DefaultAmount
-            })"
-            OnCoinUpdated="CoinUpdated"
-        /> *@
     </div>
-    @* @if(kassa != null)
-    {
-        <KassaTotal KassaId="kassa.KassaId" @ref="kassaTotal" />
-    } *@
     <RadzenButton Text="Kassa Geteld" class="btnKassaCounted" Click=@OnSubmit/>
 </div>
 
