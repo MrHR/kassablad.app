@@ -51,17 +51,24 @@ namespace kassablad.app.Server.Controllers
                 return NotFound();
             }
 
-            var kassa = kassaContainer.Kassas.LastOrDefault();
-            var kassaNoms = kassa?.KassaNominations?.ToList();
-            var kassaNominationDtos = new List<KassaNominationDto>();
-            kassaNoms?.ForEach(kn => {
-                kassaNominationDtos.Add(new KassaNominationDto {
-                    KassaNominationId = kn.KassaNominationId,
-                    Amount = kn.Amount,
-                    Total = kn.Total,
-                    NominationId = kn.NominationId,
-                });
-            });
+            // var kassa = kassaContainer.Kassas.LastOrDefault();
+            // var kassaNoms = kassa?.KassaNominations?.ToList();
+            // var kassaNominationDtos = new List<KassaNominationDto>();
+            // kassaNoms?.ForEach(kn => {
+            //     kassaNominationDtos.Add(new KassaNominationDto {
+            //         KassaNominationId = kn.KassaNominationId,
+            //         Amount = kn.Amount,
+            //         Total = kn.Total,
+            //         NominationId = kn.NominationId,
+            //         Nomination = kn.Nomination != null ? new NominationDto {
+            //             NominationId = kn.Nomination.NominationId,
+            //             Nom = kn.Nom != null ? new NomDto {
+            //                 Currency = kn.Nom.Currency,
+            //                 Multiplier = kn.Nom.Multiplier
+            //             } : null
+            //         } : null
+            //     });
+            // });
             var kassaContainerReturnDto = new KassaContainerReturnDto()
             {
                 Activiteit = kassaContainer.Activiteit,
@@ -77,25 +84,56 @@ namespace kassablad.app.Server.Controllers
                 KassaContainerId = kassaContainer.KassaContainerId,
                 Notes = kassaContainer.Notes,
                 State = kassaContainer.State.ToString(),
-                KassaDto = new KassaDto() 
+                KassaDto = kassaContainer.Kassas.Select(kassa => new KassaDto() 
                 {
                     KassaId = kassa == null ? 0 : kassa.KassaId,
                     Type = kassa?.Type,
-                    KassaNominations = kassaNominationDtos
-                },
-                lstKassaDtos = new List<KassaDto>()
-            };
-            kassaContainer.Kassas.ToList().ForEach(k => {
-                kassaContainerReturnDto.lstKassaDtos.Add(new KassaDto {
+                    KassaNominations = kassa.KassaNominations
+                        .Select(kn => new KassaNominationDto {
+                            KassaNominationId = kn.KassaNominationId,
+                            Amount = kn.Amount,
+                            Total = kn.Total,
+                            NominationId = kn.NominationId,
+                            Nomination = kn.Nomination != null ? new NominationDto {
+                                NominationId = kn.Nomination.NominationId,
+                                Nom = kn.Nom != null ? new NomDto {
+                                    Currency = kn.Nom.Currency,
+                                    Multiplier = kn.Nom.Multiplier
+                                } : null
+                            } : null
+                        }).ToList()
+                }).LastOrDefault(),
+                // lstKassaDtos = new List<KassaDto>()
+                lstKassaDtos = kassaContainer.Kassas.Select(k => new KassaDto {
                     KassaId = k.KassaId,
                     Status = k.Status,
-                    Type = k.Type
-                });
-            });
+                    Type = k.Type,
+                    KassaNominations = k.KassaNominations
+                        .Select(x => new KassaNominationDto {
+                            Total = x.Total
+                        })
+                        .ToList()
+                }).ToList()
+            };
+            // kassaContainer.Kassas.ToList().ForEach(k => {
+            //     kassaContainerReturnDto.lstKassaDtos.Add(new KassaDto {
+            //         KassaId = k.KassaId,
+            //         Status = k.Status,
+            //         Type = k.Type,
+            //         KassaNominations = k.KassaNominations
+            //             .Select(x => new KassaNominationDto {
+            //                 Total = x.Total
+            //             })
+            //             .ToList()
+            //     });
+            // });
             
 
             return kassaContainerReturnDto;
         }
+
+        // [HttpGet("getKassaContainerTotal")]
+        // public async Task<IActionResult<KassaContainerTotalDto>>(int id, KassaContainerDto)
 
         // PUT: api/KassaContainer/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -159,7 +197,7 @@ namespace kassablad.app.Server.Controllers
 
             return NoContent();
         }
-
+    
         //PUT: api/kassaContainer/updateState
         [HttpPut("updateState")]
         public async Task<IActionResult> PutKassaContainer(int id, string state, KassaContainerReturnDto kassaContainerDto)

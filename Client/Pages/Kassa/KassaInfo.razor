@@ -113,4 +113,26 @@
             NavigationManager.NavigateTo($"/kassascan", false);
         }
     }
+
+    private decimal CalculateTotal()
+    {
+        decimal total = 0;
+        decimal sKassaTot = 0;
+        decimal eKassaTot = 0;
+
+        kcDto.lstKassaDtos.ForEach(kdto => {
+            kdto.KassaNominations?.ForEach(kNoms => {
+                if(kdto.Type == "beginKassa")
+                {
+                    sKassaTot += kNoms.Total;
+                }
+                else
+                {
+                    eKassaTot += kNoms.Total;
+                }
+            });
+        });
+
+        return total;
+    }
 }

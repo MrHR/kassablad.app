@@ -19,4 +19,5 @@ public class KassaNominationDto {
     public decimal Multiplier { get; set; }
     public decimal Total { get; set; }
     public int NominationId { get; set; }
+    public NominationDto? Nomination { get; set; }
 }
