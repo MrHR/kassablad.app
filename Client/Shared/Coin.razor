@@ -28,6 +28,8 @@
     public string? Valuta { get; set; }
     [Parameter]
     public KassaNominationDto KassaNom { get; set; } = new KassaNominationDto();
+    [Parameter]
+    public EventCallback<int> OnCoinUpdated { get; set; }
     protected override async Task OnInitializedAsync()
     {
         //try to get kNomination
@@ -47,7 +49,10 @@
     public async Task openDialog() {
         var result = await DialogService.OpenAsync("Hoeveelheid", ds =>
             @<div>
-                <p class="mb-4">€ @KassaNom.Multiplier x  <RadzenNumeric TValue="int" @bind-Value=@KassaNom.Amount Change=@(args => OnChange())/></p>
+                <p class="mb-4">
+                    € @KassaNom.Multiplier x  
+                    <RadzenNumeric TValue="int" @bind-Value=@KassaNom.Amount Change=@(args => OnChange())/>    
+                </p>
                 <div class="row">
                     <div class="col">
                         <RadzenButton Text="Ok" Click="() => ds.Close(true)" Class="mr-1" Style="width: 80px;" />
@@ -65,18 +70,20 @@
     //private async Task SaveNomAsync()
     public async void OnChange()
     {
-        //TODO: create the kassanomination
-        if(KassaNom.KassaNominationId is 0)
+        Console.WriteLine($"KassaNominationId:(Coin) {KassaNom.KassaNominationId}");
+        if(KassaNom.KassaNominationId is 0) //create the kassanomination
         {
-            //TODO: post kassanom
+            //Post kassanom
             KassaNom = await createKassaNomination(KassaNom);
         }
         else // update the kassanomination
         {
-            //TODO: Put KassaNom
+            //Put KassaNom
             Console.WriteLine($"Updating KassaNomination: {KassaNom.KassaNominationId}");
             var result = await updateKassaNomination(KassaNom);
         }
+
+        await OnCoinUpdated.InvokeAsync(KassaNom.KassaNominationId);
     }
     private async Task<KassaNominationDto> createKassaNomination(KassaNominationDto kassaNom)
     {
@@ -85,11 +92,11 @@
         if(!response.IsSuccessStatusCode)
         {
             errorMessage = response.ReasonPhrase;
-            Console.WriteLine($"There was an error with creating the kassaNomination! {errorMessage}");
+            Console.WriteLine($"There was an error with creating the kassaNomination!(Coin) {errorMessage}");
         }
         else
         {
-            Console.WriteLine($"Success creating kass nom!");
+            Console.WriteLine($"Success creating kass nom!(Coin)");
             content = await response.Content.ReadFromJsonAsync<KassaNominationDto>()
                 ?? new KassaNominationDto();
         }
@@ -102,12 +109,12 @@
         if(!response.IsSuccessStatusCode)
         {
             errorMessage = response.ReasonPhrase;
-            Console.WriteLine($"There was an error updating the kassaNomination! {errorMessage}");
+            Console.WriteLine($"There was an error updating the kassaNomination!(Coin) {errorMessage}");
             return false;
         }
         else
         {
-            Console.Write($"Success updating KassaNomination!");
+            Console.Write($"Success updating KassaNomination!(Coin) id: {kassaNom.KassaNominationId}");
         }
 
         return true;
@@ -119,13 +126,13 @@
         if(!response.IsSuccessStatusCode)
         {
             errorMessage = response.ReasonPhrase;
-            Console.WriteLine($"No KassaNomination Exists! {errorMessage}");
+            Console.WriteLine($"No KassaNomination Exists!(Coin) {errorMessage}");
         }
         else
         {
-            Console.WriteLine("Success Getting KassaNomination!");
             content = await response.Content.ReadFromJsonAsync<KassaNominationDto>()
                 ?? new KassaNominationDto();
+            Console.WriteLine($"Success Getting KassaNomination!(Coin) id: {content.KassaNominationId}");
         }
 
         return content;

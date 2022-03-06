@@ -56,6 +56,32 @@ namespace kassablad.app.Server
             return kassaNominationDto;
         }
 
+        //GET: api/kassanomination/listByKassaId
+        [HttpGet("listByKassaId")]
+        public async Task<ActionResult<List<KassaNominationDto>>> GetKassaNominations(int KassaId)
+        {
+            var knList = await _context.KassaNominations
+                .Where(x => 
+                    x.KassaId == KassaId
+                    && x.Active == true)
+                .Select(x => new KassaNominationDto {
+                    Amount = x.Amount,
+                    KassaId = x.KassaId,
+                    KassaNominationId = x.KassaNominationId,
+                    NominationId = x.NominationId,
+                    Total = x.Total,
+                    Multiplier = x.Nom.Multiplier
+                })
+                .ToListAsync();
+
+            if(knList.Count <= 0)
+            {
+                return NotFound();
+            }
+
+            return knList;
+        }
+
         //GET: api/kassanomination/byKassaId
         [HttpGet("byKassaId")]
         public async Task<ActionResult<KassaNominationDto>> GetKassaNomination(int kassaId, int nominationId)

@@ -1,0 +1,67 @@
+@inject DialogService DialogService
+@using kassablad.app.Shared
+@using System.Net.Http
+@inject HttpClient Http
+@using System.Net.Http.Json @*https://docs.microsoft.com/en-us/aspnet/core/blazor/call-web-api?view=aspnetcore-6.0&pivots=webassembly *@
+
+<div style="color:white;">
+    @Total
+</div>
+
+@code {
+    private string? errorMessage;
+    @* [Parameter]
+    public string? ClassName { get; set; } *@
+    [Parameter]
+    public int? KassaId { get; set; } = null;
+    private List<KassaNominationDto> KassaNoms = new List<KassaNominationDto>();
+    public decimal Total = 0;
+    protected override async Task OnInitializedAsync()
+    {
+        //try to get kNomination
+        var content = await getKassaNominations(KassaId);  
+        if(content.Count() > 0)
+        {
+            //TODO: Calculate total
+            calculateTotal(content);
+        }
+        else // if none found
+        {
+            Console.WriteLine($"No KassaNominations were found(KassaTotal)");
+        }
+    }
+    public void calculateTotal(List<KassaNominationDto> content)
+    {
+        //Calculate total
+        Total = 0;
+        content.ForEach(x => {
+            @* Console.WriteLine($"KassaNom: {System.Text.Json.JsonSerializer.Serialize(x)}"); *@
+            Total += (x.Amount * x.Multiplier);
+        });
+        Console.WriteLine($"Total: {Total}");
+        StateHasChanged();
+    }
+    public async Task<List<KassaNominationDto>> getKassaNominations(int? KassaId)
+    {
+        var content = new List<KassaNominationDto>();   
+        if(KassaId == null)
+        {
+            return content;
+        }
+
+        using var knResponse = await Http.GetAsync($"api/KassaNomination/listByKassaId?kassaId={KassaId}");
+        if(!knResponse.IsSuccessStatusCode)
+        {
+            errorMessage = knResponse.ReasonPhrase;
+            Console.WriteLine($"No KassaNominations Exist(KassaTotal)! {errorMessage}");
+        }
+        else
+        {
+            Console.WriteLine("Success Getting KassaNominations(KassaTotal)!");
+            content = await knResponse.Content.ReadFromJsonAsync<List<KassaNominationDto>>()
+                ?? new List<KassaNominationDto>();
+        }
+
+        return content;
+    }
+}

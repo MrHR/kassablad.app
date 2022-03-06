@@ -22,7 +22,7 @@
     <h1>EindKassa</h1>
 }
 
-<p>Tel je beginkassa even na!</p>
+<p>Tel je @(kassaType == "beginKassa" ? "beginkassa" : "eindkassa") even na!</p>
 
 <div class="content-container">
     <div class="coinCounter">
@@ -37,15 +37,34 @@
                     { 
                         Amount = coin.DefaultAmount,
                         NominationId = coin.NominationId, 
-                        Total = coin.Nom.Multiplier,
-                        KassaId = kassa.KassaId
+                        Multiplier = coin.Nom.Multiplier,
+                        KassaId = kassa.KassaId,
+                        Total = coin.Nom.Multiplier * coin.DefaultAmount
                     })"
+                    OnCoinUpdated="@CoinUpdated"
                 />
             }
+            @* Is to be used when adding total => doesn't work yet 
+            <Coin 
+                ClassName=@($"coin-{nominations.First().Text}{nominations.First().Nom.Currency} coinWrapperBox")
+                Text="@nominations.First().Text"
+                Valuta="@nominations.First().Nom.Currency"
+                KassaNom="@(new KassaNominationDto 
+                { 
+                    Amount = nominations.First().DefaultAmount,
+                    NominationId = nominations.First().NominationId, 
+                    Multiplier = nominations.First().Nom.Multiplier,
+                    KassaId = kassa.KassaId,
+                    Total = nominations.First().Nom.Multiplier * nominations.First().DefaultAmount
+                })"
+                OnCoinUpdated="CoinUpdated"
+            /> *@
         </CascadingValue>
     </div>
-    <!--TODO: Add up all coin totals and display here-->
-    <span class="total">= € 350.00</span> 
+    @* @if(kassa != null)
+    {
+        <KassaTotal KassaId="kassa.KassaId" @ref="kassaTotal" />
+    } *@
     <RadzenButton Text="Kassa Geteld" class="btnKassaCounted" Click=@OnSubmit/>
 </div>
 
@@ -65,6 +84,7 @@
     private KassaContainerReturnDto kcDto { get; set; } = new();
     private KassaDto? kassa { get; set; }
     private List<NominationDto> nominations = new List<NominationDto>();
+    KassaTotal? kassaTotal;
     protected override async Task OnInitializedAsync()
     {
         //Get and Render noms
@@ -78,7 +98,7 @@
             }
             else
             {
-                Console.WriteLine("Success getting Nominations!");
+                Console.WriteLine("Success getting Nominations!(Kassa)");
                 nominations = await nomResponse.Content.ReadFromJsonAsync<List<NominationDto>>() 
                     ?? new List<NominationDto>();
             }
@@ -124,6 +144,7 @@
                 }
 
                 kassaType = kassa?.Type;
+                StateHasChanged(); //rerenders component after kassa is populated
                 Console.WriteLine($"KassaType: {kassa.Type}");
                 Console.WriteLine($"KassaContainer State: {kcDto.State}");
             }
@@ -199,5 +220,18 @@
         //serialization
         string serializedString = System.Text.Json.JsonSerializer.Serialize(kcObject);
         return serializedString;
+    }
+    protected async void CoinUpdated(int kassaNominationId)
+    {
+        var content = await kassaTotal?.getKassaNominations(kassa.KassaId);  
+        if(content.Count() > 0)
+        {
+            //TODO: Calculate total
+            kassaTotal?.calculateTotal(content);
+        }
+        else // if none found
+        {
+            Console.WriteLine($"No KassaNominations were found");
+        }
     }
 }
