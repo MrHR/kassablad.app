@@ -46,7 +46,7 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
         //KassaNominationTotal
         builder.Entity<KassaNomination>()
             .Property(kn => kn.Total)
-            .HasComputedColumnSql("[Nom_Multiplier] + [Amount]", stored: true);
+            .HasComputedColumnSql("[Nom_Multiplier] * [Amount]", stored: true);
 
         // many-to-many relationship between kassaContainers and ApplicationUsers
         //Because there is more data saved in the KassaContainerApplicationTable we define it here explicitly

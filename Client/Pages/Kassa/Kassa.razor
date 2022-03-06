@@ -26,40 +26,37 @@
 
 <div class="content-container">
     <div class="coinCounter">
-        <CascadingValue Value="update">
-            @foreach (var coin in nominations)
-            {
-                <Coin 
-                    ClassName=@($"coin-{coin.Text}{coin.Nom.Currency} coinWrapperBox")
-                    Text="@coin.Text"
-                    Valuta="@coin.Nom.Currency"
-                    KassaNom="@(new KassaNominationDto 
-                    { 
-                        Amount = coin.DefaultAmount,
-                        NominationId = coin.NominationId, 
-                        Multiplier = coin.Nom.Multiplier,
-                        KassaId = kassa.KassaId,
-                        Total = coin.Nom.Multiplier * coin.DefaultAmount
-                    })"
-                    OnCoinUpdated="@CoinUpdated"
-                />
-            }
-            @* Is to be used when adding total => doesn't work yet 
+        @foreach (var coin in nominations)
+        {
             <Coin 
-                ClassName=@($"coin-{nominations.First().Text}{nominations.First().Nom.Currency} coinWrapperBox")
-                Text="@nominations.First().Text"
-                Valuta="@nominations.First().Nom.Currency"
+                ClassName=@($"coin-{coin.Text}{coin.Nom.Currency} coinWrapperBox")
+                Text="@coin.Text"
+                Valuta="@coin.Nom.Currency"
                 KassaNom="@(new KassaNominationDto 
                 { 
-                    Amount = nominations.First().DefaultAmount,
-                    NominationId = nominations.First().NominationId, 
-                    Multiplier = nominations.First().Nom.Multiplier,
+                    Amount = coin.DefaultAmount,
+                    NominationId = coin.NominationId, 
+                    Multiplier = coin.Nom.Multiplier,
                     KassaId = kassa.KassaId,
-                    Total = nominations.First().Nom.Multiplier * nominations.First().DefaultAmount
+                    Total = coin.Nom.Multiplier * coin.DefaultAmount
                 })"
-                OnCoinUpdated="CoinUpdated"
-            /> *@
-        </CascadingValue>
+            />
+        }
+
+        @* <Coin 
+            ClassName=@($"coin-{nominations.First().Text}{nominations.First().Nom.Currency} coinWrapperBox")
+            Text="@nominations.First().Text"
+            Valuta="@nominations.First().Nom.Currency"
+            KassaNom="@(new KassaNominationDto 
+            { 
+                Amount = nominations.First().DefaultAmount,
+                NominationId = nominations.First().NominationId, 
+                Multiplier = nominations.First().Nom.Multiplier,
+                KassaId = kassa.KassaId,
+                Total = nominations.First().Nom.Multiplier * nominations.First().DefaultAmount
+            })"
+            OnCoinUpdated="CoinUpdated"
+        /> *@
     </div>
     @* @if(kassa != null)
     {

@@ -74,16 +74,18 @@
         if(KassaNom.KassaNominationId is 0) //create the kassanomination
         {
             //Post kassanom
+            Console.WriteLine("Posting");
             KassaNom = await createKassaNomination(KassaNom);
         }
         else // update the kassanomination
         {
             //Put KassaNom
+            Console.WriteLine("Putting");
             Console.WriteLine($"Updating KassaNomination: {KassaNom.KassaNominationId}");
             var result = await updateKassaNomination(KassaNom);
         }
 
-        await OnCoinUpdated.InvokeAsync(KassaNom.KassaNominationId);
+        // await OnCoinUpdated.InvokeAsync(KassaNom.KassaNominationId);
     }
     private async Task<KassaNominationDto> createKassaNomination(KassaNominationDto kassaNom)
     {
@@ -114,7 +116,7 @@
         }
         else
         {
-            Console.Write($"Success updating KassaNomination!(Coin) id: {kassaNom.KassaNominationId}");
+            Console.WriteLine($"Success updating KassaNomination!(Coin) id: {kassaNom.KassaNominationId}");
         }
 
         return true;

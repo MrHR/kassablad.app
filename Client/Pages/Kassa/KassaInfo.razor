@@ -26,10 +26,12 @@
         <RadzenDatePicker id="EindUur" TimeOnly="true" HourFormat="24" DateFormat="dd/MM/yyyy h:mm" @bind-Value="kcDto.EindUur" /><br>
         <RadzenLabel Text="Bezoekers" Component="Bezoekers" style="color:white;line-height:40px" /><br>
         <RadzenNumeric id="Bezoekers" TItem="int?" Placeholder="Aantal bezoekers" @bind-Value="kcDto.Bezoekers" /><br>
-        <RadzenLabel Text="Inkomst Bar" Component="InkomstBar" style="color:white;line-height:40px" /><br>
-        <RadzenNumeric id="InkomstBar" class="rz-currency" TItem="decimal" Placeholder="0.00" @bind-Value="kcDto.InkomstBar" /><br>
+        <RadzenLabel Text="Afroomkluis" Component="Afroomkluis" style="color:white;line-height:40px" /><br>
+        <RadzenNumeric id="Afroomkluis" class="rz-currency" TValue="decimal" Placeholder="0.00" @bind-Value="kcDto.Afroomkluis" Change="@(args => OnChange(args))"/><br>
         <RadzenLabel Text="Inkomst Lidkaart" Component="InkomstLidkaart" style="color:white;line-height:40px" /><br>
-        <RadzenNumeric id="InkomstLidkaart" class="rz-currency" TItem="decimal" Placeholder="0.00" @bind-Value="kcDto.InkomstLidkaart" /><br>
+        <RadzenNumeric id="InkomstLidkaart" class="rz-currency" TValue="decimal" Placeholder="0.00" @bind-Value="kcDto.InkomstLidkaart" Change="@(args => OnChange(args))"/><br>
+        <RadzenLabel Text="Inkomst Bar" Component="InkomstBar" style="color:white;line-height:40px" /><br>
+        <RadzenNumeric Disabled="true" id="InkomstBar" class="rz-currency" TItem="decimal" Placeholder="0.00" @bind-Value="kcDto.InkomstBar" /><br>
         <br>
         <RadzenButton
             IsBusy=@busy 
@@ -68,6 +70,7 @@
                 Console.WriteLine($"Successfully got KassaContainer: {content.KassaContainerId}");
                 content.EindUur = content.EindUur == DateTime.MinValue ? kcDto.EindUur : content.EindUur;
                 kcDto = content;
+                CalcInkomstBar();
             }
         }
         else
@@ -113,26 +116,31 @@
             NavigationManager.NavigateTo($"/kassascan", false);
         }
     }
-
-    private decimal CalculateTotal()
+    void OnChange(dynamic value) {
+        CalcInkomstBar();
+    }
+    private void CalcInkomstBar()
     {
-        decimal total = 0;
         decimal sKassaTot = 0;
         decimal eKassaTot = 0;
 
         kcDto.lstKassaDtos.ForEach(kdto => {
+            decimal tot = 0;
+            
             kdto.KassaNominations?.ForEach(kNoms => {
-                if(kdto.Type == "beginKassa")
-                {
-                    sKassaTot += kNoms.Total;
-                }
-                else
-                {
-                    eKassaTot += kNoms.Total;
-                }
+                tot += kNoms.Total;
             });
+
+            if(kdto.Type == "beginKassa")
+            {
+                sKassaTot = tot;
+            }
+            else
+            {
+                eKassaTot = tot;
+            }
         });
 
-        return total;
+        kcDto.InkomstBar = (eKassaTot - sKassaTot) - kcDto.Afroomkluis - kcDto.InkomstLidkaart;
     }
 }
