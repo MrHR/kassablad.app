@@ -30,10 +30,32 @@ namespace kassablad.app.Server.Controllers
 
         // GET: api/KassaContainer
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<KassaContainer>>> GetKassaContainers()
+        public async Task<ActionResult<IEnumerable<KassaContainerReturnDto>>> GetKassaContainers()
         {
-            
-            return await _context.KassaContainers.ToListAsync();
+            var kassaContainerList = await _context.KassaContainers
+                .Include(k => k.KassaContainerApplicationUsers)
+                .Select(kassaContainer => new KassaContainerReturnDto {
+                    Activiteit = kassaContainer.Activiteit,
+                    Afroomkluis = kassaContainer.Afroomkluis,
+                    BeginUur = kassaContainer.BeginUur,
+                    Bezoekers = kassaContainer.Bezoekers,
+                    DateAdded = kassaContainer.DateAdded,
+                    DateUpdated = kassaContainer.DateUpdated,
+                    EindUur = kassaContainer.EindUur,
+                    FKassaId = kassaContainer.FKassaId,
+                    InkomstBar = kassaContainer.InkomstBar,
+                    InkomstLidkaart = kassaContainer.InkomstLidkaart,
+                    KassaContainerId = kassaContainer.KassaContainerId,
+                    Notes = kassaContainer.Notes,
+                    Tappers = kassaContainer.KassaContainerApplicationUsers
+                        .Select(au => new UserDto {
+                            Id = au.ApplicationUserId,
+                            UserName = au.ApplicationUser.UserName
+                        }).ToList(),
+                    State = kassaContainer.State.ToString()
+                }).ToListAsync();
+
+            return kassaContainerList;
         }
 
         // GET: api/KassaContainer/5

@@ -1,9 +1,194 @@
 ﻿@page "/"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using kassablad.app.Shared
+@attribute [Authorize]
+@using System.Net.Http
+@inject HttpClient Http
+@using System.Net.Http.Json @*https://docs.microsoft.com/en-us/aspnet/core/blazor/call-web-api?view=aspnetcore-6.0&pivots=webassembly *@
+@using Microsoft.Extensions.Logging
+@using System.Text.Json
+@inject ILogger<KassaContainerDto> Logger
+@inject DialogService DialogService
+@inject NavigationManager NavigationManager
 
-<PageTitle>Index</PageTitle>
+<PageTitle>KassaContainers</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>KassaContainers</h1>
 
-Welcome to your new app.
+<p>Welcome to your new app.</p>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+<div class="content-container">
+<RadzenDataList 
+    WrapItems="true" 
+    AllowPaging="true" 
+    Data="@lstKassaContainerDtos" 
+    TItem="KassaContainerReturnDto"
+    PageSize="5" 
+    PagerHorizontalAlign="PagerHorizontalAlign.Right" 
+    ShowPagingSummary="true"
+>
+    <Template Context="kcDto">
+        <div class="container listItemContainer">
+            <div class="row">
+                <div class="product-title">
+                    <span>@(kcDto.BeginUur.ToString("dddd - dd/MM/yy"))</span>
+                    @(kcDto.Activiteit)
+                </div>
+                <div class="info">
+                    <div class="">
+                        <h5 class="">Tapper Opening</h5>
+                        <p class="">@(UserName(kcDto.Tappers?.Select(x => x.UserName).LastOrDefault()))</p>
+                    </div>
+                    <div class="">
+                        <h5 class="">Tapper Sluit</h5>
+                        <p class="">@(UserName(kcDto.Tappers?.Select(x => x.UserName).FirstOrDefault()))</p>
+                    </div>
+                    <div class="">
+                        <h5 class="">Openingstijd</h5>
+                        <p class="">@(kcDto.BeginUur.ToString("HH:mm")) - @(kcDto.EindUur.ToString("HH:mm"))</p>
+                    </div>
+                    <div class="inkomstenBadge">
+                        <RadzenBadge BadgeStyle="BadgeStyle.Secondary" Class="price-badge" Text=@($"{String.Format(new System.Globalization.CultureInfo("en-EU"), "{0:C}", kcDto.InkomstBar)}") />
+                    </div>
+                </div>
+                <div class="btnDetails">
+                    <RadzenButton Text="Details" class="" Click=@(args => OnClick(args, kcDto.KassaContainerId))/>
+                </div>
+            </div>
+        </div>
+    </Template>
+</RadzenDataList>
+</div>
+<style>
+.content-container {
+    @* background-color:white !important; *@
+}
+.content-container h5, .content-container p { 
+    color: #fdfdfd;
+}
+.listItemContainer {
+    background-color: rgb(60, 60, 60) !important;
+    border-color: rgb(40, 40, 40) !important;
+    max-width: unset;
+}
+.listItemContainer > .row {
+    --bs-gutter-x: 0;
+    display:grid;
+    @* flex-wrap: nowrap;
+    justify-content: space-between; *@
+    grid-template-columns: 25% 60% 15%;
+}
+.listItemContainer > .row > .product-title {
+    box-sizing: border-box;
+    padding:1rem !important;
+    flex: 0 0 25%;
+    display:block;
+    
+    min-height: 72px;
+    color: #da0074;
+    color:rgb(255, 88, 146);
+    background-color: rgba(255, 41, 155, .1);
+    background-color:rgba(255, 88, 146, .1);
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 20px;
+    letter-spacing: -0.02em;
+}
+.listItemContainer > .row > .product-title span {
+    display:block;
+    font-weight: 100;
+    font-size:14px;
+    padding-bottom: 10px;
+}
+.listItemContainer > .row > .info {
+    display:grid;
+    grid-template-columns: 2fr 2fr 2fr 1fr;
+    flex: 0 0 50%;
+    padding:0 1rem 0 1rem;
+}
+.listItemContainer > .row > .info > div {
+    display:inline-block;
+    width:auto;
+    align-self:center;
+}
+.listItemContainer > .row > .info > div:not(:last-child) {
+    padding-top:15px;
+}
+.listItemContainer > .row > .info > div h5 {
+    font-size:14px;
+    font-weight: bolder;
+}
+.listItemContainer > .row > .info .inkomstenBadge {
+    justify-self: end;
+}
+.listItemContainer > .row > .info .rz-badge {
+    border-radius: 4px;
+    line-height: 35px;
+    font-size:17px;
+    font-weight: 800;
+    padding: 0 10px;
+    background-color:#ddeeff;
+    color:#1b6ec2;
+}
+.listItemContainer > .row .btnDetails {
+    padding:1rem;
+    width:auto !important;
+    align-self:center;
+}
+.listItemContainer > .row .btnDetails button {
+    display:block;
+    width:100%;
+    max-width: unset !important;
+    padding:0 5px;
+}
+.rz-g > div, .rz-datalist-data > li {
+    padding:0;
+}
+.price-badge {
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 20px;
+    padding: 8px;
+}
+</style>
+
+@code {
+    private string? errorMessage;
+    private List<KassaContainerReturnDto> lstKassaContainerDtos = new List<KassaContainerReturnDto>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        //Get Containers
+        using var response = await Http.GetAsync($"api/KassaContainer");
+        if(!response.IsSuccessStatusCode)
+        {
+            errorMessage = response.ReasonPhrase;
+            Console.WriteLine($"There was an error with loading the kassa-containers! (KassaContainers){errorMessage}");
+        }
+        else
+        {
+            Console.WriteLine("Success getting kassa-containers!(KassaContainers)");
+            lstKassaContainerDtos = await response.Content.ReadFromJsonAsync<List<KassaContainerReturnDto>>() 
+                ?? new List<KassaContainerReturnDto>();
+            lstKassaContainerDtos = lstKassaContainerDtos.OrderByDescending(x => x.BeginUur).ToList();
+        }
+    }
+
+    private void OnClick(dynamic value, int KassaContainerId)
+    {
+        NavigationManager.NavigateTo($"/kassablad/{KassaContainerId}", false);
+    }
+
+    private string UserName(string? Name)
+    {
+        string result = "";
+        int index = Name.IndexOf("@");
+        if(index >= 0)
+        {
+            result = Name.Substring(0, index);
+        }
+
+        return result;
+    }
+}
